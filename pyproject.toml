@@ -29,6 +29,8 @@ dependencies = [
     "click >=8.1",
     "numpy>=1.23,<3.0a0",
     "pandas>=1.3",
+    "rapids-dask-dependency==25.12.*,>=0.0.0a0",
+# >>>>>>> END NEW CODE (f09c9b0)
     "zict>=2.0.0",
     "rich"
 ]
