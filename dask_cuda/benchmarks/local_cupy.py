@@ -170,7 +170,7 @@ def bench_once(client, args, write_profile=None):
     }
 
 
-def pretty_print_results(args, address_to_index, p2p_bw, results):
+def pretty_print_results(args, address_to_index, p2p_bw, results, client=None):
     result, *_ = results
     if args.markdown:
         print("```")
