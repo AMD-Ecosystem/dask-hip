@@ -158,8 +158,16 @@ include = [
     "pynvml",
 ]
 exclude = [
-    "dask_cuda.benchmarks*",
-    "dask_cuda.tests*",
+# <<<<<<< OLD CODE from 1bfe692 (9962599) - COMMENTED OUT
+#     "dask_cuda.benchmarks*",
+#     "dask_cuda.tests*",
+# =======
+    "docs",
+    "tests",
+    "docs.*",
+    "examples.*",
+    "tests.*",
+# >>>>>>> END NEW CODE (9962599)
 ]
 
 [tool.pydistcheck]
