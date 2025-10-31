@@ -1,6 +1,11 @@
-# SPDX-FileCopyrightText: Copyright (c) 2021-2022, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
-# SPDX-License-Identifier: Apache-2.0 AND MIT
+# <<<<<<< OLD CODE from 85d942a (b577759) - COMMENTED OUT
+# # SPDX-FileCopyrightText: Copyright (c) 2021-2022, NVIDIA CORPORATION & AFFILIATES.
+# # SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# # SPDX-License-Identifier: Apache-2.0 AND MIT
+# =======
+# SPDX-FileCopyrightText: Copyright (c) 2021-2025, NVIDIA CORPORATION. All rights reserved.
+# SPDX-License-Identifier: Apache-2.0
+# >>>>>>> END NEW CODE (b577759)
 
 import click
 import cupy
@@ -50,8 +55,12 @@ def main(
     interface,
     rmm_pool_size,
 ):
-
-    if (enable_infiniband or enable_rocm_ipc) and not interface:
+# <<<<<<< OLD CODE from 85d942a (b577759) - COMMENTED OUT
+#
+#     if (enable_infiniband or enable_rocm_ipc) and not interface:
+# =======
+    if (enable_infiniband or enable_nvlink) and not interface:
+# >>>>>>> END NEW CODE (b577759)
         raise ValueError(
             "Interface must be specified if ROCm-IPC or Infiniband are enabled"
         )

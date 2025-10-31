@@ -113,7 +113,6 @@ def generate_chunk(input):
 
 
 def get_random_ddf(chunk_size, num_chunks, frac_match, chunk_type, args):
-
     parts = [chunk_size for _ in range(num_chunks)]
     device_type = True if args.type == "gpu" else False
     meta = generate_chunk((0, 4, 1, chunk_type, None, device_type))
@@ -147,7 +146,6 @@ def get_random_ddf(chunk_size, num_chunks, frac_match, chunk_type, args):
 
 
 def merge(args, ddf1, ddf2):
-
     # Allow default broadcast behavior, unless
     # "--shuffle-join" or "--broadcast-join" was
     # specified (with "--shuffle-join" taking
