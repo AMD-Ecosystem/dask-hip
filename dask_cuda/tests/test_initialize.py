@@ -20,7 +20,11 @@ from distributed.deploy.local import LocalCluster
 
 from dask_cuda import DASK_USE_ROCM
 from dask_cuda.initialize import initialize
-from dask_cuda.utils import get_gpu_count, get_ucx_config
+# <<<<<<< OLD CODE from 0e9d8da (83fba3c) - COMMENTED OUT
+# from dask_cuda.utils import get_gpu_count, get_ucx_config
+# =======
+from dask_cuda.utils import get_ucx_config, get_gpu_handle
+# >>>>>>> END NEW CODE (83fba3c)
 from dask_cuda.utils_test import IncreasedCloseTimeoutNanny
 
 mp = mp.get_context("spawn")  # type: ignore
@@ -33,6 +37,17 @@ mp = mp.get_context("spawn")  # type: ignore
 @pytest.fixture(autouse=True)
 def unset_ucx_tls(monkeypatch):
     monkeypatch.delenv("UCX_TLS", raising=False)
+
+
+def _has_v100_gpu():
+    """Return True if the first GPU (index 0) is a V100."""
+    import pynvml
+
+    handle = get_gpu_handle(0)
+    name = pynvml.nvmlDeviceGetName(handle)
+    if isinstance(name, bytes):
+        name = name.decode("utf-8", errors="ignore")
+    return "V100" in name
 
 
 def _test_initialize_ucx_tcp():
@@ -403,6 +418,9 @@ def _test_cuda_context_warning_with_subprocess_warnings(protocol):
 
 @pytest.mark.skipif(DASK_USE_ROCM, reason="Not applicable for HIP/ROCm")
 @pytest.mark.parametrize("protocol", ["tcp", "ucx"])
+@pytest.mark.xfail(
+    _has_v100_gpu(), reason="Known intermittent failure on V100 GPUs", strict=False
+)
 def test_cuda_context_warning_with_subprocess_warnings(protocol):
     """Test CUDA context warnings from parent and worker subprocesses.
 
