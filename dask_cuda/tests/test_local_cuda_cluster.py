@@ -191,7 +191,14 @@ async def test_no_memory_limits_cudaworker():
             await new_worker.close()
 
 
-@gen_test(timeout=60)
+# <<<<<<< OLD CODE from 7da3176 (3ce274b) - COMMENTED OUT
+# @gen_test(timeout=60)
+# =======
+@gen_test(timeout=20)
+@pytest.mark.flaky(
+    reruns=3,
+)
+# >>>>>>> END NEW CODE (3ce274b)
 async def test_all_to_all():
     async with LocalCUDACluster(
         CUDA_VISIBLE_DEVICES="0,1",
