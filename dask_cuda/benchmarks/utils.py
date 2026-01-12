@@ -1,6 +1,11 @@
-# SPDX-FileCopyrightText: Copyright (c) 2020-2025, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
-# SPDX-License-Identifier: Apache-2.0 AND MIT
+# <<<<<<< OLD CODE from f7b9a25 (1771896) - COMMENTED OUT
+# # SPDX-FileCopyrightText: Copyright (c) 2020-2025, NVIDIA CORPORATION & AFFILIATES.
+# # SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# # SPDX-License-Identifier: Apache-2.0 AND MIT
+# =======
+# SPDX-FileCopyrightText: Copyright (c) 2020-2026, NVIDIA CORPORATION & AFFILIATES.
+# SPDX-License-Identifier: Apache-2.0
+# >>>>>>> END NEW CODE (1771896)
 
 import argparse
 import itertools
@@ -532,6 +537,7 @@ def setup_memory_pool(
 def setup_memory_pools(
     client,
     is_gpu,
+    is_external_cluster,
     disable_rmm,
     disable_rmm_pool,
     pool_size,
@@ -546,10 +552,13 @@ def setup_memory_pools(
     if not is_gpu:
         return
 
-    if client.run(
+    if is_external_cluster and client.run(
         lambda dask_worker: any("RMMSetup" in x for x in (dask_worker.plugins.keys()))
     ):
-        # Prevent setting up memory RMM if it was already done
+        print(
+            "RMM already setup on external cluster, skipping RMM configuration arguments",
+            flush=True,
+        )
         return
 
     client.run(
