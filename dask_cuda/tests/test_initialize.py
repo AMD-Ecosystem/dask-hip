@@ -1,6 +1,11 @@
-# SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
-# SPDX-License-Identifier: Apache-2.0 AND MIT
+# <<<<<<< OLD CODE from e914eab (7abec34) - COMMENTED OUT
+# # SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
+# # SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# # SPDX-License-Identifier: Apache-2.0 AND MIT
+# =======
+# SPDX-FileCopyrightText: Copyright (c) 2019-2026, NVIDIA CORPORATION & AFFILIATES.
+# SPDX-License-Identifier: Apache-2.0
+# >>>>>>> END NEW CODE (7abec34)
 
 import multiprocessing as mp
 import os
@@ -10,6 +15,15 @@ import sys
 import tempfile
 import textwrap
 
+try:
+    from cuda.core import system
+except ImportError:
+    # Remove when cuda-core>=0.5
+    import cuda.core.experimental
+
+    system = cuda.core.experimental.system
+
+# >>>>>>> END NEW CODE (7abec34)
 import numpy
 import psutil
 import pytest
@@ -270,11 +284,16 @@ def _test_cuda_context_warning_with_subprocess_warnings(protocol):
         # Problematic library that creates CUDA context at import time
         import os
 
-        import cuda.core.experimental
+        try:
+            from cuda.core import Device
+        except ImportError:
+            # cuda-core < 0.5
+            import cuda.core.experimental
+            Device = cuda.core.experimental.Device
 
         try:
             # Create CUDA context at import time, this will be inherited by subprocesses
-            cuda.core.experimental.Device().set_current()
+            Device().set_current()
             print("Problematic library: Created CUDA context at import time")
             os.environ['SUBPROCESS_CUDA_CONTEXT_CREATED'] = '1'
         except Exception as e:
@@ -375,7 +394,11 @@ def _test_cuda_context_warning_with_subprocess_warnings(protocol):
             ):
                 warnings_assigned_device_found.append(line)
 
-        num_devices = get_gpu_count()
+# <<<<<<< OLD CODE from e914eab (7abec34) - COMMENTED OUT
+#         num_devices = get_gpu_count()
+# =======
+        num_devices = system.num_devices
+# >>>>>>> END NEW CODE (7abec34)
 
         # Every worker raises the warning once. With protocol="ucx" the warning is
         # raised once more by the parent process.

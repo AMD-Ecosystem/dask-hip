@@ -1,11 +1,25 @@
-# SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
-# SPDX-License-Identifier: Apache-2.0 AND MIT
+# <<<<<<< OLD CODE from e914eab (7abec34) - COMMENTED OUT
+# # SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
+# # SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# # SPDX-License-Identifier: Apache-2.0 AND MIT
+# =======
+# SPDX-FileCopyrightText: Copyright (c) 2019-2026, NVIDIA CORPORATION & AFFILIATES.
+# SPDX-License-Identifier: Apache-2.0
+# >>>>>>> END NEW CODE (7abec34)
 
 import logging
 import os
 
 import click
+
+try:
+    from cuda.core import Device
+except ImportError:
+    # Remove when cuda-core>=0.5
+    import cuda.core.experimental
+
+    Device = cuda.core.experimental.Device
+# >>>>>>> END NEW CODE (7abec34)
 
 import dask
 from distributed.diagnostics.nvml import (
@@ -97,34 +111,44 @@ def _create_cuda_context_handler():
     -------
     The device string.
     """
-    from . import DASK_USE_ROCM
-
-    if DASK_USE_ROCM:
-        # Contexts are deprecated in HIP. Hence, we are following a different logic
-        # here to achieve the same effect. hipSetDevice(0) activates the first device
-        # in HIP/CUDA_VISIBLE_DEVICES, which LocalCUDACluster rotates per worker as
-        # a way to assign one GPU per worker.
-        from hip import hip as hiprt
-
-        err = hiprt.hipSetDevice(0)[0]
-        if err != hiprt.hipError_t.hipSuccess:
-            if _mock_test_device():
-                pass
-            else:
-                raise RuntimeError(
-                    f"hipSetDevice(0) failed: {hiprt.hipGetErrorString(err)[1]}"
-                )
-
+# <<<<<<< OLD CODE from e914eab (7abec34) - COMMENTED OUT
+#     from . import DASK_USE_ROCM
+#
+#     if DASK_USE_ROCM:
+#         # Contexts are deprecated in HIP. Hence, we are following a different logic
+#         # here to achieve the same effect. hipSetDevice(0) activates the first device
+#         # in HIP/CUDA_VISIBLE_DEVICES, which LocalCUDACluster rotates per worker as
+#         # a way to assign one GPU per worker.
+#         from hip import hip as hiprt
+#
+#         err = hiprt.hipSetDevice(0)[0]
+#         if err != hiprt.hipError_t.hipSuccess:
+#             if _mock_test_device():
+#                 pass
+#             else:
+#                 raise RuntimeError(
+#                     f"hipSetDevice(0) failed: {hiprt.hipGetErrorString(err)[1]}"
+#                 )
+#
+#     else:
+#         import cuda.core.experimental
+#
+#         if _mock_test_device():
+#             try:
+#                 cuda.core.experimental.Device().set_current()
+#             except Exception:
+#                 pass
+#         else:
+#             cuda.core.experimental.Device().set_current()
+# =======
+    if _mock_test_device():
+        try:
+            Device().set_current()
+        except Exception:
+            pass
     else:
-        import cuda.core.experimental
-
-        if _mock_test_device():
-            try:
-                cuda.core.experimental.Device().set_current()
-            except Exception:
-                pass
-        else:
-            cuda.core.experimental.Device().set_current()
+        Device().set_current()
+# >>>>>>> END NEW CODE (7abec34)
 
 
 def _create_cuda_context_and_warn():

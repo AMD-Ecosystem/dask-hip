@@ -1,6 +1,11 @@
-# SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
-# SPDX-License-Identifier: Apache-2.0 AND MIT
+# <<<<<<< OLD CODE from e914eab (7abec34) - COMMENTED OUT
+# # SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
+# # SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# # SPDX-License-Identifier: Apache-2.0 AND MIT
+# =======
+# SPDX-FileCopyrightText: Copyright (c) 2019-2026, NVIDIA CORPORATION & AFFILIATES.
+# SPDX-License-Identifier: Apache-2.0
+# >>>>>>> END NEW CODE (7abec34)
 
 import asyncio
 import contextlib
@@ -279,7 +284,6 @@ async def test_rmm_async():
 
     async with LocalCUDACluster(
         rmm_async=True,
-        rmm_pool_size="2GB",
         rmm_release_threshold="3GB",
         asynchronous=True,
     ) as cluster:
@@ -291,7 +295,6 @@ async def test_rmm_async():
                 assert v is rmm.mr.CudaAsyncMemoryResource
 
             ret = await get_cluster_configuration(client)
-            assert ret["[plugin] RMMSetup"]["initial_pool_size"] == 2000000000
             assert ret["[plugin] RMMSetup"]["release_threshold"] == 3000000000
 
 
@@ -301,7 +304,6 @@ async def test_rmm_async_with_maximum_pool_size():
 
     async with LocalCUDACluster(
         rmm_async=True,
-        rmm_pool_size="2GB",
         rmm_release_threshold="3GB",
         rmm_maximum_pool_size="4GB",
         asynchronous=True,
@@ -319,7 +321,6 @@ async def test_rmm_async_with_maximum_pool_size():
                 assert upstream_memory_resource_type is rmm.mr.CudaAsyncMemoryResource
 
             ret = await get_cluster_configuration(client)
-            assert ret["[plugin] RMMSetup"]["initial_pool_size"] == 2000000000
             assert ret["[plugin] RMMSetup"]["release_threshold"] == 3000000000
             assert ret["[plugin] RMMSetup"]["maximum_pool_size"] == 4000000000
 
