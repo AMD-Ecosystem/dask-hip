@@ -1,6 +1,11 @@
-# SPDX-FileCopyrightText: Copyright (c) 2021-2025, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
-# SPDX-License-Identifier: Apache-2.0 AND MIT
+# <<<<<<< OLD CODE from f31a422 (abfa0c8) - COMMENTED OUT
+# # SPDX-FileCopyrightText: Copyright (c) 2021-2025, NVIDIA CORPORATION & AFFILIATES.
+# # SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# # SPDX-License-Identifier: Apache-2.0 AND MIT
+# =======
+# SPDX-FileCopyrightText: Copyright (c) 2021-2026, NVIDIA CORPORATION & AFFILIATES.
+# SPDX-License-Identifier: Apache-2.0
+# >>>>>>> END NEW CODE (abfa0c8)
 
 import itertools
 import os
@@ -8,7 +13,6 @@ import os.path
 import pathlib
 import tempfile
 import threading
-import weakref
 from typing import Callable, Iterable, Mapping, Optional, Union
 
 import numpy as np
@@ -40,25 +44,31 @@ def get_new_cuda_buffer() -> Callable[[int], object]:
     except ImportError:
         pass
 
-    try:
-        from . import DASK_USE_ROCM
-
-        if DASK_USE_ROCM:
-            from numba.hip import current_context, device_array
-        else:
-            from numba.cuda import current_context, device_array
-
-        def numba_device_array(n):
-            a = device_array((n,), dtype="u1")
-            weakref.finalize(a, current_context)
-            return a
-
-        _new_cuda_buffer = numba_device_array
-        return _new_cuda_buffer
-    except ImportError:
-        pass
-
-    raise RuntimeError("GPUDirect Storage requires RMM, CuPy, or Numba")
+# <<<<<<< OLD CODE from f31a422 (abfa0c8) - COMMENTED OUT
+#     try:
+#         from . import DASK_USE_ROCM
+#
+#         if DASK_USE_ROCM:
+#             from numba.hip import current_context, device_array
+#         else:
+#             from numba.cuda import current_context, device_array
+#
+#         def numba_device_array(n):
+#             a = device_array((n,), dtype="u1")
+#             weakref.finalize(a, current_context)
+#             return a
+#
+#         _new_cuda_buffer = numba_device_array
+#         return _new_cuda_buffer
+#     except ImportError:
+#         pass
+#
+#     raise RuntimeError("GPUDirect Storage requires RMM, CuPy, or Numba")
+# =======
+    raise RuntimeError(
+        "GPUDirect Storage requires RMM or CuPy for CUDA buffer allocation."
+    )
+# >>>>>>> END NEW CODE (abfa0c8)
 
 
 class SpillToDiskFile:

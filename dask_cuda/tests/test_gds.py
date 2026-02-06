@@ -31,10 +31,14 @@ if ProxifyHostFile._spill_to_disk is None:
 
 from dask_cuda import DASK_USE_ROCM
 
-
-@pytest.mark.parametrize(
-    "cuda_lib", ["cupy", "cudf", "numba.hip" if DASK_USE_ROCM else "numba.cuda"]
-)
+# <<<<<<< OLD CODE from f31a422 (abfa0c8) - COMMENTED OUT
+#
+# @pytest.mark.parametrize(
+#     "cuda_lib", ["cupy", "cudf", "numba.hip" if DASK_USE_ROCM else "numba.cuda"]
+# )
+# =======
+@pytest.mark.parametrize("cuda_lib", ["cupy", "cudf"])
+# >>>>>>> END NEW CODE (abfa0c8)
 @pytest.mark.parametrize("gds_enabled", [True, False])
 def test_gds(gds_enabled, cuda_lib):
     lib = pytest.importorskip(cuda_lib)
@@ -48,10 +52,13 @@ def test_gds(gds_enabled, cuda_lib):
 #     elif cuda_lib == "numba.cuda" or cuda_lib == "numba.hip":
 # =======
         data_compare = lambda x, y: all((x == y).to_numpy())
-    elif cuda_lib == "numba.cuda":
-# >>>>>>> END NEW CODE (964f68a)
-        data_create = lambda: lib.to_device(range(10))
-        data_compare = lambda x, y: all(x.copy_to_host() == y.copy_to_host())
+# <<<<<<< OLD CODE from f31a422 (abfa0c8) - COMMENTED OUT
+#     elif cuda_lib == "numba.cuda":
+# # >>>>>>> END NEW CODE (964f68a)
+#         data_create = lambda: lib.to_device(range(10))
+#         data_compare = lambda x, y: all(x.copy_to_host() == y.copy_to_host())
+# =======
+# >>>>>>> END NEW CODE (abfa0c8)
 
     try:
         if gds_enabled and not ProxifyHostFile._spill_to_disk.gds_enabled:

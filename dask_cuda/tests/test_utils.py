@@ -1,19 +1,36 @@
-# SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
-# SPDX-License-Identifier: Apache-2.0 AND MIT
-
-# flake8: noqa: E402
+# <<<<<<< OLD CODE from f31a422 (abfa0c8) - COMMENTED OUT
+# # SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
+# # SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# # SPDX-License-Identifier: Apache-2.0 AND MIT
+#
+# # flake8: noqa: E402
+# =======
+# SPDX-FileCopyrightText: Copyright (c) 2019-2026, NVIDIA CORPORATION & AFFILIATES.
+# SPDX-License-Identifier: Apache-2.0
+# >>>>>>> END NEW CODE (abfa0c8)
 
 import os
 from unittest.mock import patch
 
 import pytest
-from numba import hip
+# <<<<<<< OLD CODE from f31a422 (abfa0c8) - COMMENTED OUT
+# from numba import hip
+#
+# import pynvml
+#
+# hip.pose_as_cuda()
+# from numba import cuda
+# =======
 
-import pynvml
+try:
+    from cuda.core import Device
+except ImportError:
+    # Remove when cuda-core>=0.5
+    import cuda.core.experimental
 
-hip.pose_as_cuda()
-from numba import cuda
+    Device = cuda.core.experimental.Device
+
+# >>>>>>> END NEW CODE (abfa0c8)
 
 from dask.config import canonical_name
 
@@ -31,6 +48,27 @@ from dask_cuda.utils import (
     parse_device_memory_limit,
     unpack_bitmask,
 )
+
+
+class _DeviceContext:
+    """Context manager for temporarily switching CUDA device."""
+
+    def __init__(self, device_id):
+        self.device_id = device_id
+        self.previous_device = None
+
+    def __enter__(self):
+        # Get current device (Device() with no args returns current device)
+        self.previous_device = Device()
+        # Set the new device as current
+        Device(self.device_id).set_current()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        # Restore previous device
+        if self.previous_device is not None:
+            self.previous_device.set_current()
+        return False
 
 
 @patch.dict(os.environ, {"CUDA_VISIBLE_DEVICES": "0,1,2"})
@@ -100,7 +138,7 @@ def test_cpu_affinity_and_cuda_visible_devices():
 
 def test_get_device_total_memory():
     for i in range(get_n_gpus()):
-        with cuda.gpus[i]:
+        with _DeviceContext(i):
             total_mem = get_device_total_memory(i)
             if has_device_memory_resource():
                 assert type(total_mem) is int
