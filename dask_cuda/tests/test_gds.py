@@ -1,9 +1,13 @@
-# <<<<<<< OLD CODE from 48bf8e0 (16c8d8c) - COMMENTED OUT
-# # SPDX-FileCopyrightText: Copyright (c) 2021-2024, NVIDIA CORPORATION & AFFILIATES.
-# # SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
-# # SPDX-License-Identifier: Apache-2.0 AND MIT
+# <<<<<<< OLD CODE from 9464e03 (964f68a) - COMMENTED OUT
+# # <<<<<<< OLD CODE from 48bf8e0 (16c8d8c) - COMMENTED OUT
+# # # SPDX-FileCopyrightText: Copyright (c) 2021-2024, NVIDIA CORPORATION & AFFILIATES.
+# # # SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# # # SPDX-License-Identifier: Apache-2.0 AND MIT
+# # =======
+# # SPDX-FileCopyrightText: Copyright (c) 2021-2025, NVIDIA CORPORATION. All rights reserved.
 # =======
-# SPDX-FileCopyrightText: Copyright (c) 2021-2025, NVIDIA CORPORATION. All rights reserved.
+# SPDX-FileCopyrightText: Copyright (c) 2021-2026, NVIDIA CORPORATION. All rights reserved.
+# >>>>>>> END NEW CODE (964f68a)
 # SPDX-License-Identifier: Apache-2.0
 # >>>>>>> END NEW CODE (16c8d8c)
 
@@ -39,8 +43,13 @@ def test_gds(gds_enabled, cuda_lib):
         data_compare = lambda x, y: all(x == y)
     elif cuda_lib == "cudf":
         data_create = lambda: lib.Series(range(10))
-        data_compare = lambda x, y: all((x == y).values_host)
-    elif cuda_lib == "numba.cuda" or cuda_lib == "numba.hip":
+# <<<<<<< OLD CODE from 9464e03 (964f68a) - COMMENTED OUT
+#         data_compare = lambda x, y: all((x == y).values_host)
+#     elif cuda_lib == "numba.cuda" or cuda_lib == "numba.hip":
+# =======
+        data_compare = lambda x, y: all((x == y).to_numpy())
+    elif cuda_lib == "numba.cuda":
+# >>>>>>> END NEW CODE (964f68a)
         data_create = lambda: lib.to_device(range(10))
         data_compare = lambda x, y: all(x.copy_to_host() == y.copy_to_host())
 
