@@ -15,13 +15,7 @@ import sys
 import tempfile
 import textwrap
 
-try:
-    from cuda.core import system
-except ImportError:
-    # Remove when cuda-core>=0.5
-    import cuda.core.experimental
-
-    system = cuda.core.experimental.system
+from dask_cuda._compat import CUDA_CORE_0_5_0
 
 # >>>>>>> END NEW CODE (7abec34)
 import numpy
@@ -40,6 +34,12 @@ from dask_cuda.initialize import initialize
 from dask_cuda.utils import get_ucx_config, get_gpu_handle
 # >>>>>>> END NEW CODE (83fba3c)
 from dask_cuda.utils_test import IncreasedCloseTimeoutNanny
+
+if CUDA_CORE_0_5_0():
+    from cuda.core import system
+else:
+    from cuda.core.experimental import system
+
 
 mp = mp.get_context("spawn")  # type: ignore
 
@@ -394,11 +394,18 @@ def _test_cuda_context_warning_with_subprocess_warnings(protocol):
             ):
                 warnings_assigned_device_found.append(line)
 
-# <<<<<<< OLD CODE from e914eab (7abec34) - COMMENTED OUT
-#         num_devices = get_gpu_count()
+# <<<<<<< OLD CODE from 9219526 (fab2c35) - COMMENTED OUT
+# # <<<<<<< OLD CODE from e914eab (7abec34) - COMMENTED OUT
+# #         num_devices = get_gpu_count()
+# # =======
+#         num_devices = system.num_devices
+# # >>>>>>> END NEW CODE (7abec34)
 # =======
-        num_devices = system.num_devices
-# >>>>>>> END NEW CODE (7abec34)
+        if CUDA_CORE_0_5_0():
+            num_devices = system.get_num_devices()
+        else:
+            num_devices = system.num_devices
+# >>>>>>> END NEW CODE (fab2c35)
 
         # Every worker raises the warning once. With protocol="ucx" the warning is
         # raised once more by the parent process.
