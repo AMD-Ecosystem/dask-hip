@@ -32,20 +32,28 @@ repos:
                 additional_dependencies: [types-cachetools]
                 args: ["--module=dask_cuda", "--ignore-missing-imports"]
                 pass_filenames: false
-      - repo: https://github.com/rapidsai/pre-commit-hooks
-        rev: v0.6.0
-        hooks:
-            - id: verify-alpha-spec
-            - id: verify-copyright
-      - repo: https://github.com/rapidsai/dependency-file-generator
-        rev: v1.20.0
-        hooks:
-            - id: rapids-dependency-file-generator
-              args: ["--clean", "--warn-all", "--strict"]
       - repo: https://github.com/shellcheck-py/shellcheck-py
         rev: v0.10.0.1
         hooks:
           - id: shellcheck
+      - repo: local
+        hooks:
+          - id: amd-copyright-spdx
+            name: Check SPDX headers
+            entry: scripts/check_spdx_amd.py
+            language: python
+            types: [text]
+            files: |
+              (?x)
+                  [.](cmake|cpp|cu|cuh|h|hpp|sh|pxd|py|pyx)$|
+                  CMakeLists[.]txt$|
+                  CMakeLists_standalone[.]txt$|
+                  meta[.]yaml$|
+                  setup[.]cfg$
+            exclude: |
+              (?x)
+                  ^\._upstream/|
+                  ^LICENSES/
 
 default_language_version:
       python: python3
