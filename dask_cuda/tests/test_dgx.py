@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 import multiprocessing as mp
 import os
@@ -89,7 +90,7 @@ def _test_tcp_over_ucx():
                 conf = ucxx.get_config()
                 assert "TLS" in conf
                 assert "tcp" in conf["TLS"]
-                assert "cuda_copy" in conf["TLS"]
+                assert "rocm_copy" in conf["TLS"]
                 assert "tcp" in conf["SOCKADDR_TLS_PRIORITY"]
                 return True
 
@@ -121,7 +122,7 @@ def test_tcp_only():
 
 
 def _test_ucx_infiniband_nvlink(
-    skip_queue, enable_infiniband, enable_nvlink, enable_rdmacm
+    skip_queue, enable_infiniband, enable_rocm_ipc, enable_rdmacm
 ):
     ucxx = pytest.importorskip("ucxx")
     cupy = pytest.importorskip("cupy")
@@ -138,7 +139,7 @@ def _test_ucx_infiniband_nvlink(
     # so that Dask doesn't try to initialize it again and raise an exception.
     ucxx.reset()
 
-    if enable_infiniband is None and enable_nvlink is None and enable_rdmacm is None:
+    if enable_infiniband is None and enable_rocm_ipc is None and enable_rdmacm is None:
         enable_tcp_over_ucx = None
         cm_tls = ["all"]
         cm_tls_priority = ["rdmacm", "tcp", "sockcm"]
@@ -154,7 +155,7 @@ def _test_ucx_infiniband_nvlink(
     initialize(
         enable_tcp_over_ucx=enable_tcp_over_ucx,
         enable_infiniband=enable_infiniband,
-        enable_nvlink=enable_nvlink,
+        enable_rocm_ipc=enable_rocm_ipc,
         enable_rdmacm=enable_rdmacm,
     )
 
@@ -163,7 +164,7 @@ def _test_ucx_infiniband_nvlink(
         interface="ib0",
         enable_tcp_over_ucx=enable_tcp_over_ucx,
         enable_infiniband=enable_infiniband,
-        enable_nvlink=enable_nvlink,
+        enable_rocm_ipc=enable_rocm_ipc,
         enable_rdmacm=enable_rdmacm,
         rmm_pool_size="1 GiB",
     ) as cluster:
@@ -179,9 +180,9 @@ def _test_ucx_infiniband_nvlink(
                 assert all(p in conf["SOCKADDR_TLS_PRIORITY"] for p in cm_tls_priority)
                 if cm_tls != ["all"]:
                     assert "tcp" in conf["TLS"]
-                    assert "cuda_copy" in conf["TLS"]
-                    if enable_nvlink:
-                        assert "cuda_ipc" in conf["TLS"]
+                    assert "rocm_copy" in conf["TLS"]
+                    if enable_rocm_ipc:
+                        assert "rocm_ipc" in conf["TLS"]
                     if enable_infiniband:
                         assert "rc" in conf["TLS"]
                 return True
@@ -192,11 +193,11 @@ def _test_ucx_infiniband_nvlink(
 @pytest.mark.parametrize(
     "params",
     [
-        {"enable_infiniband": False, "enable_nvlink": False, "enable_rdmacm": False},
-        {"enable_infiniband": True, "enable_nvlink": True, "enable_rdmacm": False},
-        {"enable_infiniband": True, "enable_nvlink": False, "enable_rdmacm": True},
-        {"enable_infiniband": True, "enable_nvlink": True, "enable_rdmacm": True},
-        {"enable_infiniband": None, "enable_nvlink": None, "enable_rdmacm": None},
+        {"enable_infiniband": False, "enable_rocm_ipc": False, "enable_rdmacm": False},
+        {"enable_infiniband": True, "enable_rocm_ipc": True, "enable_rdmacm": False},
+        {"enable_infiniband": True, "enable_rocm_ipc": False, "enable_rdmacm": True},
+        {"enable_infiniband": True, "enable_rocm_ipc": True, "enable_rdmacm": True},
+        {"enable_infiniband": None, "enable_rocm_ipc": None, "enable_rdmacm": None},
     ],
 )
 @pytest.mark.skipif(
@@ -213,7 +214,7 @@ def test_ucx_infiniband_nvlink(params):
         args=(
             skip_queue,
             params["enable_infiniband"],
-            params["enable_nvlink"],
+            params["enable_rocm_ipc"],
             params["enable_rdmacm"],
         ),
     )

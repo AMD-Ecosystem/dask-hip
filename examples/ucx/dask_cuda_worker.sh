@@ -1,5 +1,7 @@
 #!/bin/bash
 # Copyright (c) 2025, NVIDIA CORPORATION.
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 # There are several environment variables that are set but not exported
 # Shellcheck flags these up as "unused", but because `dask-scheduler` is called
@@ -24,13 +26,13 @@ while getopts ":a:i:r:t:" flag; do
 done
 
 if [ -z ${interface+x} ] && [ -n "${transport+x}" ]; then
-    echo "$0: interface must be specified with -i if NVLink or InfiniBand are enabled"
+    echo "$0: interface must be specified with -i if ROCm-IPC or InfiniBand are enabled"
     exit 1
 fi
 
 
 # set up environment variables/flags
-DASK_DISTRIBUTED__COMM__UCX__CUDA_COPY=True
+DASK_DISTRIBUTED__COMM__UCX__ROCM_COPY=True
 DASK_DISTRIBUTED__COMM__UCX__TCP=True
 DASK_DISTRIBUTED__RMM__POOL_SIZE=$rmm_pool_size
 
@@ -40,10 +42,10 @@ worker_flags="--scheduler-file scheduler.json --enable-tcp-over-ucx --rmm-pool-s
 if [ -n "${interface+x}" ]; then
     scheduler_flags+=" --interface ${interface}"
 fi
-if [[ $transport == *"nvlink"* ]]; then
-    DASK_DISTRIBUTED__COMM__UCX__NVLINK=True
+if [[ $transport == *"rocm-ipc"* ]]; then
+    DASK_DISTRIBUTED__COMM__UCX__ROCM_IPC=True
 
-    worker_flags+=" --enable-nvlink"
+    worker_flags+=" --enable-rocm-ipc"
 fi
 if [[ $transport == *"ib"* ]]; then
     DASK_DISTRIBUTED__COMM__UCX__INFINIBAND=True

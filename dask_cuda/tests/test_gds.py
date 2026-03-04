@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Copyright (c) 2021-2024, NVIDIA CORPORATION & AFFILIATES.
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
+
 import tempfile
 
 import pytest
@@ -16,8 +20,12 @@ if ProxifyHostFile._spill_to_disk is None:
         memory_limit=1024,
     )
 
+from dask_cuda import DASK_USE_ROCM
 
-@pytest.mark.parametrize("cuda_lib", ["cupy", "cudf", "numba.cuda"])
+
+@pytest.mark.parametrize(
+    "cuda_lib", ["cupy", "cudf", "numba.hip" if DASK_USE_ROCM else "numba.cuda"]
+)
 @pytest.mark.parametrize("gds_enabled", [True, False])
 def test_gds(gds_enabled, cuda_lib):
     lib = pytest.importorskip(cuda_lib)
@@ -27,7 +35,7 @@ def test_gds(gds_enabled, cuda_lib):
     elif cuda_lib == "cudf":
         data_create = lambda: lib.Series(range(10))
         data_compare = lambda x, y: all((x == y).values_host)
-    elif cuda_lib == "numba.cuda":
+    elif cuda_lib == "numba.cuda" or cuda_lib == "numba.hip":
         data_create = lambda: lib.to_device(range(10))
         data_compare = lambda x, y: all(x.copy_to_host() == y.copy_to_host())
 

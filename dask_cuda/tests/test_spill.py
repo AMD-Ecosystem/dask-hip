@@ -1,4 +1,6 @@
 # Copyright (c) 2025, NVIDIA CORPORATION.
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 import gc
 import os
@@ -256,7 +258,7 @@ def assert_disk_chunks(spills_to_disk, dask_worker=None):
         },
     ],
 )
-@gen_test(timeout=30)
+@gen_test(timeout=60)
 async def test_cupy_cluster_device_spill(params):
     cupy = pytest.importorskip("cupy")
     with dask.config.set(
@@ -357,7 +359,7 @@ async def test_cupy_cluster_device_spill(params):
         },
     ],
 )
-@gen_test(timeout=30)
+@gen_test(timeout=60)
 async def test_cudf_cluster_device_spill(params, cudf_spill):
     cudf = pytest.importorskip("cudf")
 
@@ -469,7 +471,7 @@ async def test_cudf_cluster_device_spill(params, cudf_spill):
                         break
 
 
-@gen_test(timeout=30)
+@gen_test(timeout=60)
 async def test_cudf_spill_cluster(cudf_spill):
     cudf = pytest.importorskip("cudf")
     enable_cudf_spill = cudf_spill

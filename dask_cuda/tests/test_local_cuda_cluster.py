@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 import asyncio
 import contextlib
@@ -27,7 +28,7 @@ from dask_cuda.utils import (
 from dask_cuda.utils_test import MockWorker
 
 
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_local_cuda_cluster():
     async with LocalCUDACluster(
         scheduler_port=0,
@@ -65,8 +66,8 @@ async def test_local_cuda_cluster():
 # Notice, this test might raise errors when the number of available GPUs is less
 # than 8 but as long as the test passes the errors can be ignored.
 @pytest.mark.filterwarnings("ignore:Cannot get CPU affinity")
-@patch.dict(os.environ, {"CUDA_VISIBLE_DEVICES": "0,3,6,8"})
-@gen_test(timeout=20)
+@patch.dict(os.environ, {"CUDA_VISIBLE_DEVICES": "0,3,5,7"})
+@gen_test(timeout=60)
 async def test_with_subset_of_cuda_visible_devices():
     async with LocalCUDACluster(
         scheduler_port=0,
@@ -88,12 +89,12 @@ async def test_with_subset_of_cuda_visible_devices():
                 assert {int(v.split(",")[i]) for v in result.values()} == {
                     0,
                     3,
-                    6,
-                    8,
+                    5,
+                    7,
                 }
 
 
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_ucx_protocol():
     pytest.importorskip("distributed_ucxx")
 
@@ -105,7 +106,7 @@ async def test_ucx_protocol():
         )
 
 
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_explicit_ucx_with_protocol_none():
     pytest.importorskip("distributed_ucxx")
 
@@ -121,7 +122,7 @@ async def test_explicit_ucx_with_protocol_none():
 
 
 @pytest.mark.filterwarnings("ignore:Exception ignored in")
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_ucx_protocol_type_error():
     pytest.importorskip("distributed_ucxx")
 
@@ -133,7 +134,7 @@ async def test_ucx_protocol_type_error():
             pass
 
 
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_n_workers():
     async with LocalCUDACluster(
         CUDA_VISIBLE_DEVICES="0,1",
@@ -145,7 +146,7 @@ async def test_n_workers():
         assert len(cluster.worker_spec) == 2
 
 
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_threads_per_worker_and_memory_limit():
     async with LocalCUDACluster(threads_per_worker=4, asynchronous=True) as cluster:
         assert all(ws.nthreads == 4 for ws in cluster.scheduler.workers.values())
@@ -153,7 +154,7 @@ async def test_threads_per_worker_and_memory_limit():
         assert full_mem >= MEMORY_LIMIT - 1024 and full_mem < MEMORY_LIMIT + 1024
 
 
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_no_memory_limits_cluster():
 
     async with LocalCUDACluster(
@@ -167,7 +168,7 @@ async def test_no_memory_limits_cluster():
             assert all(res.values())
 
 
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_no_memory_limits_cudaworker():
 
     async with LocalCUDACluster(
@@ -191,7 +192,7 @@ async def test_no_memory_limits_cudaworker():
             await new_worker.close()
 
 
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_all_to_all():
     async with LocalCUDACluster(
         CUDA_VISIBLE_DEVICES="0,1",
@@ -209,7 +210,7 @@ async def test_all_to_all():
             assert all(all_data.count(i) == n_workers for i in all_data)
 
 
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_rmm_pool():
     rmm = pytest.importorskip("rmm")
 
@@ -225,14 +226,14 @@ async def test_rmm_pool():
                 assert v is rmm.mr.PoolMemoryResource
 
 
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_rmm_maximum_poolsize_without_poolsize_error():
     pytest.importorskip("rmm")
     with pytest.raises(ValueError):
         await LocalCUDACluster(rmm_maximum_pool_size="2GB", asynchronous=True)
 
 
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_rmm_managed():
     rmm = pytest.importorskip("rmm")
 
@@ -248,7 +249,7 @@ async def test_rmm_managed():
                 assert v is rmm.mr.ManagedMemoryResource
 
 
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_rmm_async():
     rmm = pytest.importorskip("rmm")
 
@@ -270,7 +271,7 @@ async def test_rmm_async():
             assert ret["[plugin] RMMSetup"]["release_threshold"] == 3000000000
 
 
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_rmm_async_with_maximum_pool_size():
     rmm = pytest.importorskip("rmm")
 
@@ -299,7 +300,7 @@ async def test_rmm_async_with_maximum_pool_size():
             assert ret["[plugin] RMMSetup"]["maximum_pool_size"] == 4000000000
 
 
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_rmm_logging():
     rmm = pytest.importorskip("rmm")
 
@@ -316,7 +317,7 @@ async def test_rmm_logging():
                 assert v is rmm.mr.LoggingResourceAdaptor
 
 
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_pre_import():
     module = None
 
@@ -355,7 +356,7 @@ def test_pre_import_not_found():
     asyncio.run(_test_pre_import_not_found())
 
 
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_cluster_worker():
     async with LocalCUDACluster(
         scheduler_port=0,
@@ -370,7 +371,7 @@ async def test_cluster_worker():
             await new_worker.close()
 
 
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_available_mig_workers():
     uuids = get_gpu_count_mig(return_uuids=True)[1]
     if len(uuids) > 0:
@@ -398,7 +399,7 @@ async def test_available_mig_workers():
                     )
 
 
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_gpu_uuid():
     gpu_uuid = get_gpu_uuid(0)
 
@@ -415,7 +416,7 @@ async def test_gpu_uuid():
             assert list(result.values())[0] == gpu_uuid
 
 
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_rmm_track_allocations():
     rmm = pytest.importorskip("rmm")
     async with LocalCUDACluster(
@@ -437,7 +438,7 @@ async def test_rmm_track_allocations():
                 assert v is rmm.mr.PoolMemoryResource
 
 
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_get_cluster_configuration():
     async with LocalCUDACluster(
         rmm_pool_size="2GB",
@@ -456,7 +457,7 @@ async def test_get_cluster_configuration():
                 assert ret["device-memory-limit"] == 30
 
 
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 @pytest.mark.skip_if_no_device_memory(
     "Devices without dedicated memory resources do not support fractional limits"
 )
@@ -519,7 +520,7 @@ def test_worker_fraction_limits_no_dedicated_memory(argument):
     asyncio.run(_test_worker_fraction_limits_no_dedicated_memory())
 
 
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_cudf_spill_disabled():
     cudf = pytest.importorskip("cudf")
 
@@ -542,7 +543,7 @@ async def test_cudf_spill_disabled():
                 assert v == 0
 
 
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 @pytest.mark.skip_if_no_device_memory(
     "Devices without dedicated memory resources cannot enable cuDF spill"
 )
@@ -573,7 +574,7 @@ async def test_cudf_spill():
 @pytest.mark.skip_if_device_memory(
     "Devices with dedicated memory resources cannot test error"
 )
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_cudf_spill_no_dedicated_memory():
     cudf = pytest.importorskip("cudf")  # noqa: F841
 

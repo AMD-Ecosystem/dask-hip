@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 import math
 import operator
@@ -14,7 +15,6 @@ from typing import Optional
 
 import click
 import numpy as np
-import pynvml
 import toolz
 
 import dask
@@ -22,6 +22,8 @@ from dask.config import canonical_name
 from dask.utils import format_bytes, parse_bytes
 from distributed import wait
 from distributed.comm import parse_address
+
+from pynvml2amdsmi import pynvml
 
 try:
     from nvtx import annotate as nvtx_annotate
@@ -259,16 +261,36 @@ def has_device_memory_resource(device_index=0):
         return True
 
 
+def warn_about_nvlink_if_not_suppressed(
+    rocm_ipc_enabled: bool = True, rocm_ipc_opt_name: str = "enable_rocm_ipc"
+):
+    if int(os.environ.get("DASK_HIP_SUPPRESS_NVLINK_WARNING", "0")) == 0:
+        msg = "NVLink is not valid on AMD"
+        if rocm_ipc_enabled:
+            msg += ", using ROCm-IPC instead"
+        msg += f". Please use {rocm_ipc_opt_name} instead. "
+        msg += (
+            "Set the environment variable DASK_HIP_SUPPRESS_NVLINK_WARNING=1 to "
+            "suppress this warning."
+        )
+        warnings.warn(msg)
+
+
 def get_ucx_config(
     enable_tcp_over_ucx=None,
     enable_infiniband=None,
-    enable_nvlink=None,
+    enable_rocm_ipc=None,
     enable_rdmacm=None,
+    enable_nvlink=None,
 ):
     try:
         import distributed_ucxx
     except ImportError:
         return None
+
+    if enable_nvlink is not None:
+        enable_rocm_ipc = enable_nvlink
+        warn_about_nvlink_if_not_suppressed()
 
     distributed_ucxx.config.setup_config()
     ucx_config = dask.config.get("distributed-ucxx")
@@ -283,24 +305,24 @@ def get_ucx_config(
     # user.
     #
     # This may be handled more gracefully in Distributed in the future.
-    opts = [enable_tcp_over_ucx, enable_infiniband, enable_nvlink]
+    opts = [enable_tcp_over_ucx, enable_infiniband, enable_rocm_ipc]
     if any(opt is False for opt in opts) and not any(opt is True for opt in opts):
         if enable_tcp_over_ucx is None:
             enable_tcp_over_ucx = True
-        if enable_nvlink is None:
-            enable_nvlink = True
+        if enable_rocm_ipc is None:
+            enable_rocm_ipc = True
         if enable_infiniband is None:
             enable_infiniband = True
 
     ucx_config[canonical_name("tcp", ucx_config)] = enable_tcp_over_ucx
     ucx_config[canonical_name("infiniband", ucx_config)] = enable_infiniband
-    ucx_config[canonical_name("nvlink", ucx_config)] = enable_nvlink
+    ucx_config[canonical_name("rocm-ipc", ucx_config)] = enable_rocm_ipc
     ucx_config[canonical_name("rdmacm", ucx_config)] = enable_rdmacm
 
-    if enable_tcp_over_ucx or enable_infiniband or enable_nvlink:
-        ucx_config[canonical_name("cuda-copy", ucx_config)] = True
+    if enable_tcp_over_ucx or enable_infiniband or enable_rocm_ipc:
+        ucx_config[canonical_name("rocm-copy", ucx_config)] = True
     else:
-        ucx_config[canonical_name("cuda-copy", ucx_config)] = None
+        ucx_config[canonical_name("rocm-copy", ucx_config)] = None
 
     return ucx_config
 
@@ -310,8 +332,9 @@ def get_preload_options(
     create_cuda_context=None,
     enable_tcp_over_ucx=None,
     enable_infiniband=None,
-    enable_nvlink=None,
+    enable_rocm_ipc=None,
     enable_rdmacm=None,
+    enable_nvlink=None,
 ):
     """
     Return a dictionary with the preload and preload_argv options required to
@@ -321,7 +344,7 @@ def get_preload_options(
     ----------
     protocol: None or str, default None
         If "ucx", options related to UCX (enable_tcp_over_ucx, enable_infiniband,
-        enable_nvlink) are added to preload_argv.
+        enable_rocm_ipc) are added to preload_argv.
     create_cuda_context: bool, default None
         Ensure the CUDA context gets created at initialization, generally
         needed by Dask workers.
@@ -334,8 +357,8 @@ def get_preload_options(
     enable_rdmacm: bool, default None
         Set environment variables to enable UCX RDMA connection manager support.
         Currently requires enable_infiniband=True.
-    enable_nvlink: bool, default None
-        Set environment variables to enable UCX NVLink support. Implies
+    enable_rocm_ipc: bool, default None
+        Set environment variables to enable UCX rocm_ipc support. Implies
         enable_tcp=True.
 
     Example
@@ -350,6 +373,10 @@ def get_preload_options(
      'preload_argv': ['--create-cuda-context',
       '--enable-infiniband']}
     """
+    if enable_nvlink is not None:
+        enable_rocm_ipc = enable_nvlink
+        warn_about_nvlink_if_not_suppressed()
+
     preload_options = {"preload": ["dask_cuda.initialize"], "preload_argv": []}
 
     if create_cuda_context:
@@ -363,8 +390,8 @@ def get_preload_options(
             initialize_ucx_argv.append("--enable-infiniband")
         if enable_rdmacm:
             initialize_ucx_argv.append("--enable-rdmacm")
-        if enable_nvlink:
-            initialize_ucx_argv.append("--enable-nvlink")
+        if enable_rocm_ipc:
+            initialize_ucx_argv.append("--enable-rocm-ipc")
 
         preload_options["preload_argv"].extend(initialize_ucx_argv)
 

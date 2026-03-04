@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 import pytest
 
@@ -36,7 +37,7 @@ def _check_env_value(spec, k, v):
 @pytest.mark.parametrize("threads_per_worker", [1, 8])
 @pytest.mark.parametrize("silence_logs", [False, True])
 @pytest.mark.parametrize("enable_infiniband", [False, True])
-@pytest.mark.parametrize("enable_nvlink", [False, True])
+@pytest.mark.parametrize("enable_rocm_ipc", [False, True])
 def test_worker_spec(
     num_devices,
     cls,
@@ -46,7 +47,7 @@ def test_worker_spec(
     threads_per_worker,
     silence_logs,
     enable_infiniband,
-    enable_nvlink,
+    enable_rocm_ipc,
 ):
     if protocol == "ucx":
         pytest.importorskip("distributed_ucxx")
@@ -61,12 +62,12 @@ def test_worker_spec(
             threads_per_worker=threads_per_worker,
             silence_logs=silence_logs,
             enable_infiniband=enable_infiniband,
-            enable_nvlink=enable_nvlink,
+            enable_rocm_ipc=enable_rocm_ipc,
         )
 
-    if (enable_infiniband or enable_nvlink) and protocol != "ucx":
+    if (enable_infiniband or enable_rocm_ipc) and protocol != "ucx":
         with pytest.raises(
-            TypeError, match="Enabling InfiniBand or NVLink requires protocol='ucx'"
+            TypeError, match="Enabling InfiniBand or ROCm-IPC requires protocol='ucx'"
         ):
             _test()
         return

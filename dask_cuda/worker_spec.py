@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 import os
 
@@ -9,7 +10,7 @@ from distributed.system import MEMORY_LIMIT
 from .initialize import initialize
 from .local_cuda_cluster import cuda_visible_devices
 from .plugins import CPUAffinity
-from .utils import get_cpu_affinity, get_gpu_count
+from .utils import get_cpu_affinity, get_gpu_count, warn_about_nvlink_if_not_suppressed
 
 
 def worker_spec(
@@ -21,7 +22,8 @@ def worker_spec(
     CUDA_VISIBLE_DEVICES=None,
     enable_tcp_over_ucx=False,
     enable_infiniband=False,
-    enable_nvlink=False,
+    enable_rocm_ipc=False,
+    enable_nvlink=None,
     **kwargs
 ):
     """Create a Spec for a CUDA worker.
@@ -50,8 +52,8 @@ def worker_spec(
     enable_infiniband: bool
         Set environment variables to enable UCX InfiniBand support. Implies
         enable_tcp_over_ucx=True.
-    enable_nvlink: bool
-        Set environment variables to enable UCX NVLink support. Implies
+    enable_rocm_ipc: bool
+        Set environment variables to enable UCX ROCm-IPC support. Implies
         enable_tcp_over_ucx=True.
 
     Examples
@@ -84,11 +86,15 @@ def worker_spec(
        'preload_argv': ['--create-cuda-context']}}}
 
     """
+    if enable_nvlink is not None:
+        enable_rocm_ipc = enable_nvlink
+        warn_about_nvlink_if_not_suppressed()
+
     if (
-        enable_tcp_over_ucx or enable_infiniband or enable_nvlink
+        enable_tcp_over_ucx or enable_infiniband or enable_rocm_ipc
     ) and protocol != "ucx":
         raise TypeError(
-            "Enabling InfiniBand or NVLink requires protocol='ucx'"
+            "Enabling InfiniBand or ROCm-IPC requires protocol='ucx'"
         ) from None
 
     if CUDA_VISIBLE_DEVICES is None:
@@ -103,7 +109,7 @@ def worker_spec(
     initialize(
         enable_tcp_over_ucx=enable_tcp_over_ucx,
         enable_infiniband=enable_infiniband,
-        enable_nvlink=enable_nvlink,
+        enable_rocm_ipc=enable_rocm_ipc,
     )
 
     spec = {}

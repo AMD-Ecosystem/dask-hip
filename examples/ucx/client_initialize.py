@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Copyright (c) 2021-2022, NVIDIA CORPORATION & AFFILIATES.
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
+
 import click
 import cupy
 
@@ -14,9 +18,9 @@ from dask_cuda.initialize import initialize
     type=str,
 )
 @click.option(
-    "--enable-nvlink/--disable-nvlink",
+    "--enable-rocm-ipc/--disable-rocm-ipc",
     default=False,
-    help="Enable NVLink communication",
+    help="Enable ROCm-IPC communication",
 )
 @click.option(
     "--enable-infiniband/--disable-infiniband",
@@ -30,7 +34,7 @@ from dask_cuda.initialize import initialize
 )
 def main(
     address,
-    enable_nvlink,
+    enable_rocm_ipc,
     enable_infiniband,
     enable_rdmacm,
 ):
@@ -38,7 +42,7 @@ def main(
     # set up environment
     initialize(
         enable_tcp_over_ucx=True,
-        enable_nvlink=enable_nvlink,
+        enable_rocm_ipc=enable_rocm_ipc,
         enable_infiniband=enable_infiniband,
         enable_rdmacm=enable_rdmacm,
     )

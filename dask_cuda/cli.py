@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: Copyright (c) 2023-2025, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 from __future__ import absolute_import, division, print_function
 
@@ -16,7 +17,11 @@ from distributed.security import Security
 from distributed.utils import import_term
 
 from .cuda_worker import CUDAWorker
-from .utils import CommaSeparatedChoice, print_cluster_config
+from .utils import (
+    CommaSeparatedChoice,
+    print_cluster_config,
+    warn_about_nvlink_if_not_suppressed,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -310,11 +315,20 @@ def cuda():
     ``--enable-tcp-over-ucx`` when enabled.""",
 )
 @click.option(
+    "--enable-rocm-ipc/--disable-rocm-ipc",
+    default=None,
+    show_default=True,
+    help="""Set environment variables to enable rocm_ipc TL for UCX, implies
+    ``--enable-tcp-over-ucx`` when enabled.""",
+)
+@click.option(
     "--enable-nvlink/--disable-nvlink",
     default=None,
     show_default=True,
-    help="""Set environment variables to enable UCX over NVLink, implies
-    ``--enable-tcp-over-ucx`` when enabled.""",
+    help="""Same effect as ``--enable-rocm-ipc/--disable-rocm-ipc``, as NVLink in not
+    valid/supported for AMD. Only supported for easy portability. A warning will be
+    shown unless suppressed using the 'DASK_HIP_SUPPRESS_NVLINK_WARNING' environment
+    variable. Please use ``--enable-rocm-ipc/--disable-rocm-ipc`` instead.""",
 )
 @click.option(
     "--enable-rdmacm/--disable-rdmacm",
@@ -386,12 +400,13 @@ def worker(
     tls_key,
     enable_tcp_over_ucx,
     enable_infiniband,
-    enable_nvlink,
+    enable_rocm_ipc,
     enable_rdmacm,
     enable_jit_unspill,
     worker_class,
     pre_import,
     multiprocessing_method,
+    enable_nvlink,
     **kwargs,
 ):
     """Launch a distributed worker with GPUs attached to an existing scheduler.
@@ -403,6 +418,10 @@ def worker(
     https://docs.rapids.ai/api/dask-cuda/stable/quickstart.html#dask-cuda-worker
     for info.
     """
+    if enable_nvlink is not None:
+        enable_rocm_ipc = enable_nvlink
+        warn_about_nvlink_if_not_suppressed(rocm_ipc_opt_name="--enable-rocm-ipc")
+
     if multiprocessing_method == "forkserver":
         import multiprocessing.forkserver as f
 
@@ -459,7 +478,7 @@ def worker(
             security,
             enable_tcp_over_ucx,
             enable_infiniband,
-            enable_nvlink,
+            enable_rocm_ipc,
             enable_rdmacm,
             enable_jit_unspill,
             worker_class,
@@ -483,6 +502,9 @@ def worker(
             loop.run_sync(run)
         except (KeyboardInterrupt, TimeoutError):
             pass
+        except RuntimeError as e:
+            if "Event loop stopped before Future completed." not in str(e):
+                raise
         finally:
             logger.info("End worker")
 

@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 import multiprocessing as mp
 import os
@@ -9,7 +10,7 @@ import sys
 import tempfile
 import textwrap
 
-import cuda.core.experimental
+# import cuda.core.experimental
 import numpy
 import psutil
 import pytest
@@ -18,8 +19,9 @@ from dask import array as da
 from distributed import Client
 from distributed.deploy.local import LocalCluster
 
+from dask_cuda import DASK_USE_ROCM
 from dask_cuda.initialize import initialize
-from dask_cuda.utils import get_ucx_config
+from dask_cuda.utils import get_gpu_count, get_ucx_config
 from dask_cuda.utils_test import IncreasedCloseTimeoutNanny
 
 mp = mp.get_context("spawn")  # type: ignore
@@ -53,7 +55,7 @@ def _test_initialize_ucx_tcp():
                 conf = ucxx.get_config()
                 assert "TLS" in conf
                 assert "tcp" in conf["TLS"]
-                assert "cuda_copy" in conf["TLS"]
+                assert "rocm_copy" in conf["TLS"]
                 assert "tcp" in conf["SOCKADDR_TLS_PRIORITY"]
                 return True
 
@@ -73,7 +75,7 @@ def test_initialize_ucx_tcp():
 def _test_initialize_ucx_nvlink():
     ucxx = pytest.importorskip("ucxx")
 
-    kwargs = {"enable_nvlink": True}
+    kwargs = {"enable_rocm_ipc": True}
     initialize(**kwargs)
     with LocalCluster(
         protocol="ucx",
@@ -92,9 +94,9 @@ def _test_initialize_ucx_nvlink():
             def check_ucx_options():
                 conf = ucxx.get_config()
                 assert "TLS" in conf
-                assert "cuda_ipc" in conf["TLS"]
+                assert "rocm_ipc" in conf["TLS"]
                 assert "tcp" in conf["TLS"]
-                assert "cuda_copy" in conf["TLS"]
+                assert "rocm_copy" in conf["TLS"]
                 assert "tcp" in conf["SOCKADDR_TLS_PRIORITY"]
                 return True
 
@@ -135,7 +137,7 @@ def _test_initialize_ucx_infiniband():
                 assert "TLS" in conf
                 assert "rc" in conf["TLS"]
                 assert "tcp" in conf["TLS"]
-                assert "cuda_copy" in conf["TLS"]
+                assert "rocm_copy" in conf["TLS"]
                 assert "tcp" in conf["SOCKADDR_TLS_PRIORITY"]
                 return True
 
@@ -355,7 +357,7 @@ def _test_cuda_context_warning_with_subprocess_warnings(protocol):
             ):
                 warnings_assigned_device_found.append(line)
 
-        num_devices = cuda.core.experimental.system.num_devices
+        num_devices = get_gpu_count()
 
         # Every worker raises the warning once. With protocol="ucx" the warning is
         # raised once more by the parent process.
@@ -396,6 +398,7 @@ def _test_cuda_context_warning_with_subprocess_warnings(protocol):
             print(f"Cleanup error: {e}")
 
 
+@pytest.mark.skipif(DASK_USE_ROCM, reason="Not applicable for HIP/ROCm")
 @pytest.mark.parametrize("protocol", ["tcp", "ucx"])
 def test_cuda_context_warning_with_subprocess_warnings(protocol):
     """Test CUDA context warnings from parent and worker subprocesses.

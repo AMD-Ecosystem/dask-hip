@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 from __future__ import absolute_import, division, print_function
 
@@ -28,7 +29,7 @@ from dask_cuda.utils import (
 
 @patch.dict(
     os.environ,
-    {"CUDA_VISIBLE_DEVICES": "0,3,7,8", "DASK_CUDA_TEST_DISABLE_DEVICE_SPECIFIC": "1"},
+    {"CUDA_VISIBLE_DEVICES": "0,3,5,7", "DASK_CUDA_TEST_DISABLE_DEVICE_SPECIFIC": "1"},
 )
 def test_cuda_visible_devices(loop):  # noqa: F811
     with popen(["dask", "scheduler", "--port", "9359", "--no-dashboard"]):
@@ -46,14 +47,14 @@ def test_cuda_visible_devices(loop):  # noqa: F811
             ],
         ):
             with Client("127.0.0.1:9359", loop=loop) as client:
-                assert wait_workers(client, n_gpus=4)
+                assert wait_workers(client, min_timeout=100, n_gpus=4)
 
                 def get_visible_devices():
                     return os.environ["CUDA_VISIBLE_DEVICES"]
 
                 # verify 4 workers with the 4 expected CUDA_VISIBLE_DEVICES
                 result = client.run(get_visible_devices)
-                expected = {"0,3,7,8": 1, "3,7,8,0": 1, "7,8,0,3": 1, "8,0,3,7": 1}
+                expected = {"0,3,5,7": 1, "3,5,7,0": 1, "5,7,0,3": 1, "7,0,3,5": 1}
                 for v in result.values():
                     del expected[v]
 

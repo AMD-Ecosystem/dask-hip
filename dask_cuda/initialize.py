@@ -1,11 +1,11 @@
 # SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 import logging
 import os
 
 import click
-import cuda.core.experimental
 
 import dask
 from distributed.diagnostics.nvml import (
@@ -14,7 +14,7 @@ from distributed.diagnostics.nvml import (
     has_cuda_context,
 )
 
-from .utils import get_ucx_config
+from .utils import get_ucx_config, warn_about_nvlink_if_not_suppressed
 
 logger = logging.getLogger(__name__)
 
@@ -97,13 +97,34 @@ def _create_cuda_context_handler():
     -------
     The device string.
     """
-    if _mock_test_device():
-        try:
-            cuda.core.experimental.Device().set_current()
-        except Exception:
-            pass
+    from . import DASK_USE_ROCM
+
+    if DASK_USE_ROCM:
+        # Contexts are deprecated in HIP. Hence, we are following a different logic
+        # here to achieve the same effect. hipSetDevice(0) activates the first device
+        # in HIP/CUDA_VISIBLE_DEVICES, which LocalCUDACluster rotates per worker as
+        # a way to assign one GPU per worker.
+        from hip import hip as hiprt
+
+        err = hiprt.hipSetDevice(0)[0]
+        if err != hiprt.hipError_t.hipSuccess:
+            if _mock_test_device():
+                pass
+            else:
+                raise RuntimeError(
+                    f"hipSetDevice(0) failed: {hiprt.hipGetErrorString(err)[1]}"
+                )
+
     else:
-        cuda.core.experimental.Device().set_current()
+        import cuda.core.experimental
+
+        if _mock_test_device():
+            try:
+                cuda.core.experimental.Device().set_current()
+            except Exception:
+                pass
+        else:
+            cuda.core.experimental.Device().set_current()
 
 
 def _create_cuda_context_and_warn():
@@ -172,8 +193,9 @@ def initialize(
     create_cuda_context=True,
     enable_tcp_over_ucx=None,
     enable_infiniband=None,
-    enable_nvlink=None,
+    enable_rocm_ipc=None,
     enable_rdmacm=None,
+    enable_nvlink=None,
 ):
     """Create CUDA context and initialize UCXX configuration.
 
@@ -212,17 +234,24 @@ def initialize(
     enable_infiniband : bool, default None
         Set environment variables to enable UCX over InfiniBand, implies
         ``enable_tcp_over_ucx=True`` when ``True``.
-    enable_nvlink : bool, default None
-        Set environment variables to enable UCX over NVLink, implies
+    enable_rocm_ipc : bool, default None
+        Set environment variables to enable UCX over ROCm-IPC, implies
         ``enable_tcp_over_ucx=True`` when ``True``.
     enable_rdmacm : bool, default None
         Set environment variables to enable UCX RDMA connection manager support,
         requires ``enable_infiniband=True``.
+    enable_nvlink : bool, default None
+        Unsupported on AMD, only provided for easy portability. Please use
+        enable_rocm_ipc instead.
     """
+    if enable_nvlink is not None:
+        enable_rocm_ipc = enable_nvlink
+        warn_about_nvlink_if_not_suppressed()
+
     ucx_config = get_ucx_config(
         enable_tcp_over_ucx=enable_tcp_over_ucx,
         enable_infiniband=enable_infiniband,
-        enable_nvlink=enable_nvlink,
+        enable_rocm_ipc=enable_rocm_ipc,
         enable_rdmacm=enable_rdmacm,
     )
     dask.config.set({"distributed-ucxx": ucx_config})

@@ -1,7 +1,36 @@
+# SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
+
 import sys
 
 if sys.platform != "linux":
     raise ImportError("Only Linux is supported by Dask-CUDA at this time")
+
+
+def __init_dask_cuda_rocm():
+    import os
+    import shutil
+
+    # Check if ROCm is available and perform initialization, silently move on
+    # if ROCm is not found
+    has_amdgpu = os.path.exists("/dev/kfd") and os.path.exists("/dev/dri")
+    if not has_amdgpu:
+        return False
+
+    cmd = "amd-smi"
+    cmd_path = shutil.which(cmd)
+    if not cmd_path:
+        return False
+
+    # set HIP_VISIBLE_DEVICES as CUDA_VISIBLE_DEVICES if the latter is not set
+    if "HIP_VISIBLE_DEVICES" in os.environ and "CUDA_VISIBLE_DEVICES" not in os.environ:
+        os.environ["CUDA_VISIBLE_DEVICES"] = os.environ["HIP_VISIBLE_DEVICES"]
+
+    return True
+
+
+DASK_USE_ROCM = __init_dask_cuda_rocm()
 
 import dask
 import dask.utils
@@ -10,9 +39,7 @@ from distributed.protocol.serialize import dask_deserialize, dask_serialize
 
 from ._version import __git_commit__, __version__
 from .cuda_worker import CUDAWorker
-
 from .local_cuda_cluster import LocalCUDACluster
-
 
 try:
     import dask.dataframe as dask_dataframe

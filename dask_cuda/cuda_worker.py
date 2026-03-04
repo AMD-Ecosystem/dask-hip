@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: Copyright (c) 2020-2025, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 from __future__ import absolute_import, division, print_function
 
@@ -22,7 +23,13 @@ from distributed.proctitle import (
 from distributed.worker_memory import parse_memory_limit
 
 from .initialize import initialize
-from .utils import cuda_visible_devices, get_n_gpus, get_ucx_config, nvml_device_index
+from .utils import (
+    cuda_visible_devices,
+    get_n_gpus,
+    get_ucx_config,
+    nvml_device_index,
+    warn_about_nvlink_if_not_suppressed,
+)
 from .worker_common import worker_data_function, worker_plugins
 
 
@@ -58,13 +65,18 @@ class CUDAWorker(Server):
         security=None,
         enable_tcp_over_ucx=None,
         enable_infiniband=None,
-        enable_nvlink=None,
+        enable_rocm_ipc=None,
         enable_rdmacm=None,
         jit_unspill=None,
         worker_class=None,
         pre_import=None,
+        enable_nvlink=None,
         **kwargs,
     ):
+        if enable_nvlink is not None:
+            enable_rocm_ipc = enable_nvlink
+            warn_about_nvlink_if_not_suppressed()
+
         # Required by RAPIDS libraries (e.g., cuDF) to ensure no context
         # initialization happens before we can set CUDA_VISIBLE_DEVICES
         os.environ["RAPIDS_NO_INITIALIZE"] = "True"
@@ -135,17 +147,14 @@ class CUDAWorker(Server):
                     "https://github.com/rapidsai/rmm"
                 )  # pragma: no cover
         else:
-            if enable_nvlink:
+            if enable_rocm_ipc:
                 warnings.warn(
-                    "When using NVLink we recommend setting a "
-                    "`rmm_pool_size`.  Please see: "
-                    "https://docs.rapids.ai/api/dask-cuda/nightly/ucx/ "
-                    "for more details"
+                    "When using ROCm-IPC we recommend setting a `rmm_pool_size`"
                 )
 
-        if enable_nvlink and rmm_managed_memory:
+        if enable_rocm_ipc and rmm_managed_memory:
             raise ValueError(
-                "RMM managed memory and NVLink are currently incompatible."
+                "RMM managed memory and ROCm-IPC are currently incompatible."
             )
 
         # Ensure this parent dask-cuda-worker process uses the same UCX
@@ -154,7 +163,7 @@ class CUDAWorker(Server):
             create_cuda_context=False,
             enable_tcp_over_ucx=enable_tcp_over_ucx,
             enable_infiniband=enable_infiniband,
-            enable_nvlink=enable_nvlink,
+            enable_rocm_ipc=enable_rocm_ipc,
             enable_rdmacm=enable_rdmacm,
         )
 
@@ -213,7 +222,7 @@ class CUDAWorker(Server):
                     "distributed-ucxx": get_ucx_config(
                         enable_tcp_over_ucx=enable_tcp_over_ucx,
                         enable_infiniband=enable_infiniband,
-                        enable_nvlink=enable_nvlink,
+                        enable_rocm_ipc=enable_rocm_ipc,
                         enable_rdmacm=enable_rdmacm,
                     )
                 },

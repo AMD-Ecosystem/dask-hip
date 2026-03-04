@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 import contextlib
 import math
@@ -230,7 +231,7 @@ def pretty_print_results(args, address_to_index, p2p_bw, results):
     if args.protocol in ["ucx", "ucxx"]:
         print_key_value(key="TCP", value=f"{args.enable_tcp_over_ucx}")
         print_key_value(key="InfiniBand", value=f"{args.enable_infiniband}")
-        print_key_value(key="NVLink", value=f"{args.enable_nvlink}")
+        print_key_value(key="ROCm-IPC", value=f"{args.enable_rocm_ipc}")
     print_key_value(key="Worker thread(s)", value=f"{args.threads_per_worker}")
     print_key_value(key="Data processed", value=f"{format_bytes(results[0][0])}")
     if args.markdown:
@@ -267,7 +268,7 @@ def create_tidy_results(
         "protocol": args.protocol,
         "tcp": args.enable_tcp_over_ucx,
         "ib": args.enable_infiniband,
-        "nvlink": args.enable_nvlink,
+        "rocm_ipc": args.enable_rocm_ipc,
         "nreps": args.runs,
     }
     timing_data = pd.DataFrame(

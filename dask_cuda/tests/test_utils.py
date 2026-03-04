@@ -1,11 +1,18 @@
 # SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
+
+# flake8: noqa: E402
 
 import os
 from unittest.mock import patch
 
-import pynvml
 import pytest
+from numba import hip
+
+import pynvml
+
+hip.pose_as_cuda()
 from numba import cuda
 
 from dask.config import canonical_name
@@ -103,8 +110,8 @@ def test_get_preload_options_default():
 
 @pytest.mark.parametrize("enable_tcp", [True, False])
 @pytest.mark.parametrize("enable_infiniband", [True, False])
-@pytest.mark.parametrize("enable_nvlink", [True, False])
-def test_get_preload_options(enable_tcp, enable_infiniband, enable_nvlink):
+@pytest.mark.parametrize("enable_rocm_ipc", [True, False])
+def test_get_preload_options(enable_tcp, enable_infiniband, enable_rocm_ipc):
     pytest.importorskip("distributed_ucxx")
 
     opts = get_preload_options(
@@ -112,7 +119,7 @@ def test_get_preload_options(enable_tcp, enable_infiniband, enable_nvlink):
         create_cuda_context=True,
         enable_tcp_over_ucx=enable_tcp,
         enable_infiniband=enable_infiniband,
-        enable_nvlink=enable_nvlink,
+        enable_rocm_ipc=enable_rocm_ipc,
     )
 
     assert "preload" in opts
@@ -124,20 +131,20 @@ def test_get_preload_options(enable_tcp, enable_infiniband, enable_nvlink):
         assert "--enable-tcp-over-ucx" in opts["preload_argv"]
     if enable_infiniband:
         assert "--enable-infiniband" in opts["preload_argv"]
-    if enable_nvlink:
-        assert "--enable-nvlink" in opts["preload_argv"]
+    if enable_rocm_ipc:
+        assert "--enable-rocm-ipc" in opts["preload_argv"]
 
 
 @pytest.mark.parametrize("enable_tcp_over_ucx", [True, False, None])
-@pytest.mark.parametrize("enable_nvlink", [True, False, None])
+@pytest.mark.parametrize("enable_rocm_ipc", [True, False, None])
 @pytest.mark.parametrize("enable_infiniband", [True, False, None])
-def test_get_ucx_config(enable_tcp_over_ucx, enable_infiniband, enable_nvlink):
+def test_get_ucx_config(enable_tcp_over_ucx, enable_infiniband, enable_rocm_ipc):
     pytest.importorskip("distributed_ucxx")
 
     kwargs = {
         "enable_tcp_over_ucx": enable_tcp_over_ucx,
         "enable_infiniband": enable_infiniband,
-        "enable_nvlink": enable_nvlink,
+        "enable_rocm_ipc": enable_rocm_ipc,
     }
     ucx_config = get_ucx_config(**kwargs)
 
@@ -148,8 +155,8 @@ def test_get_ucx_config(enable_tcp_over_ucx, enable_infiniband, enable_nvlink):
     else:
         if (
             enable_infiniband is not True
-            and enable_nvlink is not True
-            and not (enable_infiniband is None and enable_nvlink is None)
+            and enable_rocm_ipc is not True
+            and not (enable_infiniband is None and enable_rocm_ipc is None)
         ):
             assert ucx_config[canonical_name("tcp", ucx_config)] is True
         else:
@@ -160,34 +167,35 @@ def test_get_ucx_config(enable_tcp_over_ucx, enable_infiniband, enable_nvlink):
     else:
         if (
             enable_tcp_over_ucx is not True
-            and enable_nvlink is not True
-            and not (enable_tcp_over_ucx is None and enable_nvlink is None)
+            and enable_rocm_ipc is not True
+            and not (enable_tcp_over_ucx is None and enable_rocm_ipc is None)
         ):
             assert ucx_config[canonical_name("infiniband", ucx_config)] is True
         else:
             assert ucx_config[canonical_name("infiniband", ucx_config)] is None
 
-    if enable_nvlink is not None:
-        assert ucx_config[canonical_name("nvlink", ucx_config)] is enable_nvlink
+    if enable_rocm_ipc is not None:
+        assert ucx_config[canonical_name("rocm-ipc", ucx_config)] is enable_rocm_ipc
     else:
         if (
             enable_tcp_over_ucx is not True
             and enable_infiniband is not True
             and not (enable_tcp_over_ucx is None and enable_infiniband is None)
         ):
-            assert ucx_config[canonical_name("nvlink", ucx_config)] is True
+            assert ucx_config[canonical_name("rocm-ipc", ucx_config)] is True
         else:
-            assert ucx_config[canonical_name("nvlink", ucx_config)] is None
+            assert ucx_config[canonical_name("rocm-ipc", ucx_config)] is None
 
     if any(
         opt is not None
-        for opt in [enable_tcp_over_ucx, enable_infiniband, enable_nvlink]
+        for opt in [enable_tcp_over_ucx, enable_infiniband, enable_rocm_ipc]
     ) and not all(
-        opt is False for opt in [enable_tcp_over_ucx, enable_infiniband, enable_nvlink]
+        opt is False
+        for opt in [enable_tcp_over_ucx, enable_infiniband, enable_rocm_ipc]
     ):
-        assert ucx_config[canonical_name("cuda-copy", ucx_config)] is True
+        assert ucx_config[canonical_name("rocm-copy", ucx_config)] is True
     else:
-        assert ucx_config[canonical_name("cuda-copy", ucx_config)] is None
+        assert ucx_config[canonical_name("rocm-copy", ucx_config)] is None
 
 
 def test_parse_visible_devices():

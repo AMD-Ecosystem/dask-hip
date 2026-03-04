@@ -17,7 +17,7 @@ DartConfiguration.tcl
 ## Python build directories & artifacts
 htmlcov
 dist/
-dask_cuda.egg-info/
+dask_hip.egg-info/
 python/build
 python/cudf/bindings/*.cpp
 dask-worker-space/

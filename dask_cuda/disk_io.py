@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: Copyright (c) 2021-2025, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 import itertools
 import os
@@ -40,11 +41,16 @@ def get_new_cuda_buffer() -> Callable[[int], object]:
         pass
 
     try:
-        import numba.cuda
+        from . import DASK_USE_ROCM
+
+        if DASK_USE_ROCM:
+            from numba.hip import current_context, device_array
+        else:
+            from numba.cuda import current_context, device_array
 
         def numba_device_array(n):
-            a = numba.cuda.device_array((n,), dtype="u1")
-            weakref.finalize(a, numba.cuda.current_context)
+            a = device_array((n,), dtype="u1")
+            weakref.finalize(a, current_context)
             return a
 
         _new_cuda_buffer = numba_device_array

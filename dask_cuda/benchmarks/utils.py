@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: Copyright (c) 2020-2025, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 import argparse
 import itertools
@@ -190,11 +191,11 @@ def parse_benchmark_args(
         help="Enable InfiniBand over UCX.",
     )
     cluster_args.add_argument(
-        "--enable-nvlink",
+        "--enable-rocm-ipc",
         default=None,
         action="store_true",
-        dest="enable_nvlink",
-        help="Enable NVLink over UCX.",
+        dest="enable_rocm_ipc",
+        help="Enable ROCm-IPC over UCX.",
     )
     cluster_args.add_argument(
         "--enable-rdmacm",
@@ -216,10 +217,10 @@ def parse_benchmark_args(
         help="Disable InfiniBand over UCX.",
     )
     cluster_args.add_argument(
-        "--disable-nvlink",
+        "--disable-rocm-ipc",
         action="store_false",
-        dest="enable_nvlink",
-        help="Disable NVLink over UCX.",
+        dest="enable_rocm_ipc",
+        help="Disable ROCm-IPC over UCX.",
     )
     cluster_args.add_argument(
         "--disable-rdmacm",
@@ -385,7 +386,7 @@ def get_cluster_options(args):
     ucx_options = {
         "enable_tcp_over_ucx": args.enable_tcp_over_ucx,
         "enable_infiniband": args.enable_infiniband,
-        "enable_nvlink": args.enable_nvlink,
+        "enable_rocm_ipc": args.enable_rocm_ipc,
         "enable_rdmacm": args.enable_rdmacm,
     }
 

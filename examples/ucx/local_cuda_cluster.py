@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: Copyright (c) 2021-2022, NVIDIA CORPORATION & AFFILIATES.
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
+
 import click
 import cupy
 
@@ -10,9 +14,9 @@ from dask_cuda import LocalCUDACluster
 
 @click.command(context_settings=dict(ignore_unknown_options=True))
 @click.option(
-    "--enable-nvlink/--disable-nvlink",
+    "--enable-rocm-ipc/--disable-rocm-ipc",
     default=False,
-    help="Enable NVLink communication",
+    help="Enable ROCm-IPC communication",
 )
 @click.option(
     "--enable-infiniband/--disable-infiniband",
@@ -29,7 +33,7 @@ from dask_cuda import LocalCUDACluster
     default=None,
     type=str,
     help="Interface used by scheduler for communication. Must be "
-    "specified if NVLink or InfiniBand are enabled.",
+    "specified if ROCm-IPC or InfiniBand are enabled.",
 )
 @click.option(
     "--rmm-pool-size",
@@ -40,22 +44,22 @@ from dask_cuda import LocalCUDACluster
     "an integer (bytes) or string (like 5GB or 5000M).",
 )
 def main(
-    enable_nvlink,
+    enable_rocm_ipc,
     enable_infiniband,
     enable_rdmacm,
     interface,
     rmm_pool_size,
 ):
 
-    if (enable_infiniband or enable_nvlink) and not interface:
+    if (enable_infiniband or enable_rocm_ipc) and not interface:
         raise ValueError(
-            "Interface must be specified if NVLink or Infiniband are enabled"
+            "Interface must be specified if ROCm-IPC or Infiniband are enabled"
         )
 
     # initialize scheduler & workers
     cluster = LocalCUDACluster(
         enable_tcp_over_ucx=True,
-        enable_nvlink=enable_nvlink,
+        enable_rocm_ipc=enable_rocm_ipc,
         enable_infiniband=enable_infiniband,
         enable_rdmacm=enable_rdmacm,
         interface=interface,

@@ -1,5 +1,6 @@
 # SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 import copy
 import logging
@@ -18,6 +19,7 @@ from .utils import (
     nvml_device_index,
     parse_cuda_visible_device,
     parse_device_memory_limit,
+    warn_about_nvlink_if_not_suppressed,
 )
 from .worker_common import worker_data_function, worker_plugins
 
@@ -106,8 +108,8 @@ class LocalCUDACluster(LocalCluster):
     enable_infiniband : bool, default None
         Set environment variables to enable UCX over InfiniBand, requires
         ``protocol="ucx"``, and implies ``enable_tcp_over_ucx=True`` when ``True``.
-    enable_nvlink : bool, default None
-        Set environment variables to enable UCX over NVLink, requires
+    enable_rocm_ipc : bool, default None
+        Set environment variables to enable UCX over ROCm-IPC, requires
         ``protocol="ucx"``, and implies ``enable_tcp_over_ucx=True`` when ``True``.
     enable_rdmacm : bool, default None
         Set environment variables to enable UCX RDMA connection manager support,
@@ -233,7 +235,7 @@ class LocalCUDACluster(LocalCluster):
         protocol=None,
         enable_tcp_over_ucx=None,
         enable_infiniband=None,
-        enable_nvlink=None,
+        enable_rocm_ipc=None,
         enable_rdmacm=None,
         rmm_pool_size=None,
         rmm_maximum_pool_size=None,
@@ -246,8 +248,13 @@ class LocalCUDACluster(LocalCluster):
         jit_unspill=None,
         log_spilling=False,
         pre_import=None,
+        enable_nvlink=None,
         **kwargs,
     ):
+        if enable_nvlink is not None:
+            enable_rocm_ipc = enable_nvlink
+            warn_about_nvlink_if_not_suppressed()
+
         # Required by RAPIDS libraries (e.g., cuDF) to ensure no context
         # initialization happens before we can set CUDA_VISIBLE_DEVICES
         os.environ["RAPIDS_NO_INITIALIZE"] = "True"
@@ -317,12 +324,9 @@ class LocalCUDACluster(LocalCluster):
                     "see https://github.com/rapidsai/rmm"
                 )  # pragma: no cover
         else:
-            if enable_nvlink:
+            if enable_rocm_ipc:
                 warnings.warn(
-                    "When using NVLink we recommend setting a "
-                    "`rmm_pool_size`. Please see: "
-                    "https://docs.rapids.ai/api/dask-cuda/nightly/ucx/ "
-                    "for more details"
+                    "When using ROCm-IPC we recommend setting a `rmm_pool_size`"
                 )
 
         self.rmm_log_directory = rmm_log_directory
@@ -349,18 +353,20 @@ class LocalCUDACluster(LocalCluster):
                 shared_filesystem=shared_filesystem,
             )
 
-        if enable_tcp_over_ucx or enable_infiniband or enable_nvlink:
+        if enable_tcp_over_ucx or enable_infiniband or enable_rocm_ipc:
             if protocol is None:
                 protocol = "ucx"
             if protocol not in ("ucx", "ucxx"):
-                raise TypeError("Enabling InfiniBand or NVLink requires protocol='ucx'")
+                raise TypeError(
+                    "Enabling InfiniBand or ROCm-IPC requires protocol='ucx'"
+                )
 
         self.host = kwargs.get("host", None)
 
         initialize(
             create_cuda_context=False,
             enable_tcp_over_ucx=enable_tcp_over_ucx,
-            enable_nvlink=enable_nvlink,
+            enable_rocm_ipc=enable_rocm_ipc,
             enable_infiniband=enable_infiniband,
             enable_rdmacm=enable_rdmacm,
         )
@@ -392,7 +398,7 @@ class LocalCUDACluster(LocalCluster):
             config={
                 "distributed.comm.ucx": get_ucx_config(
                     enable_tcp_over_ucx=enable_tcp_over_ucx,
-                    enable_nvlink=enable_nvlink,
+                    enable_rocm_ipc=enable_rocm_ipc,
                     enable_infiniband=enable_infiniband,
                     enable_rdmacm=enable_rdmacm,
                 )
