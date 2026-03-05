@@ -79,6 +79,7 @@ async def test_with_subset_of_cuda_visible_devices():
         asynchronous=True,
         worker_class=MockWorker,
         data=dict,
+        dashboard_address=":0",
     ) as cluster:
         async with Client(cluster, asynchronous=True) as client:
             assert len(cluster.workers) == 4
@@ -104,7 +105,7 @@ async def test_ucx_protocol():
     pytest.importorskip("distributed_ucxx")
 
     async with LocalCUDACluster(
-        protocol="ucx", asynchronous=True, data=dict
+        protocol="ucx", asynchronous=True, data=dict, dashboard_address=":0"
     ) as cluster:
         assert all(
             ws.address.startswith("ucx://") for ws in cluster.scheduler.workers.values()
@@ -388,6 +389,7 @@ async def test_cluster_worker():
         scheduler_port=0,
         asynchronous=True,
         n_workers=1,
+        dashboard_address=":0",
     ) as cluster:
         assert len(cluster.workers) == 1
         async with Client(cluster, asynchronous=True) as client:
@@ -433,6 +435,7 @@ async def test_gpu_uuid():
         CUDA_VISIBLE_DEVICES=gpu_uuid,
         scheduler_port=0,
         asynchronous=True,
+        dashboard_address=":0",
     ) as cluster:
         assert len(cluster.workers) == 1
         async with Client(cluster, asynchronous=True) as client:
@@ -449,6 +452,7 @@ async def test_rmm_track_allocations():
         rmm_pool_size="2GB",
         asynchronous=True,
         rmm_track_allocations=True,
+        dashboard_address=":0",
     ) as cluster:
         async with Client(cluster, asynchronous=True) as client:
             memory_resource_type = await client.run(
@@ -473,6 +477,7 @@ async def test_get_cluster_configuration():
         CUDA_VISIBLE_DEVICES="0",
         scheduler_port=0,
         asynchronous=True,
+        dashboard_address=":0",
     ) as cluster:
         async with Client(cluster, asynchronous=True) as client:
             ret = await get_cluster_configuration(client)
@@ -489,7 +494,7 @@ async def test_get_cluster_configuration():
 )
 async def test_worker_fraction_limits():
     async with LocalCUDACluster(
-        dashboard_address=None,
+        dashboard_address=":0",
         device_memory_limit=0.1,
         rmm_pool_size=0.2,
         rmm_maximum_pool_size=0.3,
@@ -552,6 +557,7 @@ async def test_cudf_spill_disabled():
 
     async with LocalCUDACluster(
         asynchronous=True,
+        dashboard_address=":0",
     ) as cluster:
         async with Client(cluster, asynchronous=True) as client:
             cudf_spill = await client.run(
@@ -580,6 +586,7 @@ async def test_cudf_spill():
         enable_cudf_spill=True,
         cudf_spill_stats=2,
         asynchronous=True,
+        dashboard_address=":0",
     ) as cluster:
         async with Client(cluster, asynchronous=True) as client:
             cudf_spill = await client.run(
@@ -623,6 +630,9 @@ async def test_cudf_spill_no_dedicated_memory():
     "device_memory_limit",
     [None, "1B"],
 )
+@pytest.mark.filterwarnings(
+    "ignore:The jit_unspill argument and JIT unspilling:FutureWarning"
+)
 def test_print_cluster_config(capsys, jit_unspill, device_memory_limit):
     pytest.importorskip("distributed_ucxx")
 
@@ -650,6 +660,7 @@ def test_print_cluster_config(capsys, jit_unspill, device_memory_limit):
             device_memory_limit=device_memory_limit,
             jit_unspill=jit_unspill,
             protocol="ucx",
+            dashboard_address=":0",
         ) as cluster:
             with Client(cluster) as client:
                 print_cluster_config(client)
@@ -678,6 +689,23 @@ def test_rmm_pool_size_warns():
         FutureWarning, match="'rmm_pool_size' is not needed when 'rmm_async' is enabled"
     ):
         try:
-            cluster = LocalCUDACluster(n_workers=1, rmm_pool_size="1GB", rmm_async=True)
+            cluster = LocalCUDACluster(
+                n_workers=1, rmm_pool_size="1GB", rmm_async=True, dashboard_address=":0"
+            )
         finally:
             cluster.close()
+
+
+@pytest.mark.parametrize("jit_unspill", [True, False, None])
+@pytest.mark.filterwarnings("error")
+def test_jit_unspill_deprecation_local_cuda_cluster(jit_unspill):
+    if jit_unspill is None:
+        ctx = contextlib.nullcontext()
+    else:
+        ctx = pytest.warns(FutureWarning, match="The jit_unspill argument")
+
+    with (
+        ctx,
+        LocalCUDACluster(n_workers=1, jit_unspill=jit_unspill, dashboard_address=":0"),
+    ):
+        pass

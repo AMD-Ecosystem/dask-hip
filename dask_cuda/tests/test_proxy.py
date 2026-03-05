@@ -290,7 +290,14 @@ def test_fixed_attribute_name():
 @pytest.mark.skip_if_no_device_memory(
     "Spilling not supported in devices without dedicated memory resource"
 )
-@gen_test(timeout=60)
+# <<<<<<< OLD CODE from 6734108 (9ac2346) - COMMENTED OUT
+# @gen_test(timeout=60)
+# =======
+@pytest.mark.filterwarnings(
+    "ignore:The jit_unspill argument and JIT unspilling:FutureWarning"
+)
+@gen_test(timeout=20)
+# >>>>>>> END NEW CODE (9ac2346)
 async def test_spilling_local_cuda_cluster(jit_unspill):
     """Testing spilling of a proxied cudf dataframe in a local cuda cluster"""
     cudf = pytest.importorskip("cudf")

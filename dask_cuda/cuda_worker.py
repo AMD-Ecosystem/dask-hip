@@ -1,6 +1,11 @@
-# SPDX-FileCopyrightText: Copyright (c) 2020-2025, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
-# SPDX-License-Identifier: Apache-2.0 AND MIT
+# <<<<<<< OLD CODE from 6734108 (9ac2346) - COMMENTED OUT
+# # SPDX-FileCopyrightText: Copyright (c) 2020-2025, NVIDIA CORPORATION & AFFILIATES.
+# # SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# # SPDX-License-Identifier: Apache-2.0 AND MIT
+# =======
+# SPDX-FileCopyrightText: Copyright (c) 2020-2026, NVIDIA CORPORATION & AFFILIATES.
+# SPDX-License-Identifier: Apache-2.0
+# >>>>>>> END NEW CODE (9ac2346)
 
 from __future__ import absolute_import, division, print_function
 
@@ -166,9 +171,6 @@ class CUDAWorker(Server):
             enable_rocm_ipc=enable_rocm_ipc,
             enable_rdmacm=enable_rdmacm,
         )
-
-        if jit_unspill is None:
-            jit_unspill = dask.config.get("jit-unspill", default=False)
 
         data = worker_data_function(
             device_memory_limit=device_memory_limit,
