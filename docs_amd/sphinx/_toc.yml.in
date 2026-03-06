@@ -1,0 +1,41 @@
+defaults:
+  numbered: False
+root: index
+
+subtrees:
+- entries:
+  - file: what-is-dask-hip.md
+    title: What is dask-hip?
+
+- caption: Installation
+  entries:
+  - file: install/install.md
+    title: Installing dask-hip
+  - file: install/build.md
+    title: Building from source
+
+- caption: How to
+  entries:
+  - file: how-to/quickstart.md
+    title: Quick start
+  - file: how-to/ucx.md
+    title: UCX integration
+  - file: how-to/spilling.md
+    title: Spilling from device
+  - file: how-to/explicit-comms.md
+    title: Explicit communication
+
+- caption: Reference
+  entries:
+  - file: reference/api.rst
+    title: Python API reference
+    subtrees:
+    - entries:
+      - file: reference/core-api.rst
+        title: Core API
+      - file: reference/advanced-api.rst
+        title: Advanced / Utility API
+
+- caption: About
+  entries:
+  - file: license.md

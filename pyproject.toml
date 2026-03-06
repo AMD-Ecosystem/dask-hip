@@ -53,10 +53,10 @@ cuda = "dask_cuda.cli:cuda"
 
 [project.optional-dependencies]
 docs = [
-    "numpydoc>=1.1.0",
-    "sphinx",
-    "sphinx-click>=2.7.1",
-    "sphinx-rtd-theme>=0.5.1",
+    "rocm-docs-core==1.27.0",
+    "myst-parser",
+    "sphinx-autoapi",
+    "sphinx-copybutton",
 ]
 test = [
     "pytest",
