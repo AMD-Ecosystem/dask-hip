@@ -18,8 +18,8 @@ authors = [
 license = { text = "Apache-2.0 AND MIT" }
 requires-python = ">=3.10"
 dependencies = [
-    "dask",
-    "distributed",
+    "dask==2025.9.1",
+    "distributed==2025.9.1",
 
     "hip-python==7.2.*",
     "hip-python-as-cuda==7.2.*",
@@ -30,6 +30,7 @@ dependencies = [
     "numpy>=1.23,<3.0a0",
     "pandas>=1.3",
     "zict>=2.0.0",
+    "rich"
 ]
 classifiers = [
     "Intended Audience :: Developers",
@@ -62,6 +63,15 @@ test = [
     "pytest-cov",
     "pytest-rerunfailures!=16.0.0",
     "pytest-timeout",
+    "psutil",
+    "pyarrow",
+]
+test_ucxx = [
+    "amd-hipucxx==0.1.*",
+    "amd_distributed_hipucxx==0.1.*",
+]
+test_hipdf = [
+    "amd_dask_hipdf"
 ]
 
 [project.urls]
@@ -141,6 +151,7 @@ version = {file = "dask_cuda/VERSION"}
 [tool.setuptools.packages.find]
 include = [
     "dask_cuda",
+    "dask_cuda.*",
     "pynvml2amdsmi",
     "pynvml",
 ]
