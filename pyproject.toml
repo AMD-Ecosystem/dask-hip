@@ -143,7 +143,7 @@ filterwarnings = [
 ]
 
 [tool.setuptools]
-license-files = ["LICENSES/*"]
+license-files = ["LICENSE", "NOTICE.txt"]
 
 [tool.setuptools.dynamic]
 version = {file = "dask_cuda/VERSION"}

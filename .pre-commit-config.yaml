@@ -53,7 +53,8 @@ repos:
             exclude: |
               (?x)
                   ^\._upstream/|
-                  ^LICENSES/
+                  ^LICENSE$|
+                  ^NOTICE\.txt$
 
 default_language_version:
       python: python3
