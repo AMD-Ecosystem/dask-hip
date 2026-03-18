@@ -9,20 +9,22 @@ subtrees:
 
 - caption: Installation
   entries:
-  - file: install/install.md
+  - file: install/system-requirements.rst
+    title: System requirements
+  - file: install/install.rst
     title: Installing dask-hip
-  - file: install/build.md
+  - file: install/build.rst
     title: Building from source
 
 - caption: How to
   entries:
-  - file: how-to/quickstart.md
+  - file: how-to/quickstart.rst
     title: Quick start
-  - file: how-to/ucx.md
+  - file: how-to/ucx.rst
     title: UCX integration
-  - file: how-to/spilling.md
+  - file: how-to/spilling.rst
     title: Spilling from device
-  - file: how-to/explicit-comms.md
+  - file: how-to/explicit-comms.rst
     title: Explicit communication
 
 - caption: Reference
@@ -38,4 +40,4 @@ subtrees:
 
 - caption: About
   entries:
-  - file: license.md
+  - file: license.rst

@@ -1,8 +1,11 @@
-Dask CUDA
+<!-- SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc. -->
+<!-- SPDX-License-Identifier: MIT -->
+
+Dask HIP
 =========
 
 Various utilities to improve deployment and management of Dask workers on
-CUDA-enabled systems.
+HIP-enabled systems.
 
 This library is experimental, and its API is subject to change at any time
 without notice.
@@ -18,16 +21,4 @@ cluster = LocalCUDACluster()
 client = Client(cluster)
 ```
 
-Documentation is available [here](https://docs.rapids.ai/api/dask-cuda/nightly/).
-
-What this is not
-----------------
-
-This library does not automatically convert your Dask code to run on GPUs.
-
-It only helps with deployment and management of Dask workers in multi-GPU
-systems.  Parallelizing GPU libraries like [RAPIDS](https://rapids.ai) and
-[CuPy](https://cupy.chainer.org) with Dask is an ongoing effort.  You may wish
-to read about this effort at [blog.dask.org](https://blog.dask.org) for more
-information.  Additional information about Dask-CUDA can also be found in the
-[docs](https://docs.rapids.ai/api/dask-cuda/nightly/).
+Documentation is available [here](https://rocm.docs.amd.com/projects/dask-hip-internal/en/dev-suphilip-add_amd_documentation/).

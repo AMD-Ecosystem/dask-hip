@@ -10,7 +10,7 @@ Prerequisites:
     pip install sphinx-click
 
 Usage:
-    cd docs_amd/reference/dask_cuda_api
+    cd docs_amd/reference/dask_hip_api
     python generate_cli_docs.py
 """
 

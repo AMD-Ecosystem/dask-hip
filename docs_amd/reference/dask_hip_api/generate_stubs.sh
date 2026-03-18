@@ -9,7 +9,7 @@
 #   pip install mypy  # provides stubgen
 #
 # Usage:
-#   cd docs_amd/reference/dask_cuda_api
+#   cd docs_amd/reference/dask_hip_api
 #   bash generate_stubs.sh
 
 set -euo pipefail

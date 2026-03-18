@@ -8,11 +8,8 @@ Python API reference
 
 The dask-hip Python API is organized into two tiers:
 
-- **Core API** -- The primary classes and functions used by most applications:
+- :doc:`core-api` -- The primary classes and functions used by most applications:
   cluster management, worker initialization, explicit communication, and CLI.
 
-- **Advanced / Utility API** -- Lower-level helpers for GPU management, worker
+- :doc:`advanced-api` -- Lower-level helpers for GPU management, worker
   plugins, memory management, proxy objects, and storage.
-
-- :doc:`core-api`
-- :doc:`advanced-api`

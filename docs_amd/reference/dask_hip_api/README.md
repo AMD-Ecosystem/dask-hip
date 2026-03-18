@@ -27,7 +27,7 @@ The stubs must be generated on a system with AMD GPUs and a working dask-hip ins
 2. Run the generation script:
 
    ```bash
-   cd docs_amd/reference/dask_cuda_api
+   cd docs_amd/reference/dask_hip_api
    bash generate_stubs.sh
    ```
 

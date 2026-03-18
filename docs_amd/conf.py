@@ -17,7 +17,7 @@ try:
 
     version_number = __version__
 except ImportError:
-    version_number = "0.0.0.dev"
+    version_number = "1.0.0"
 
 left_nav_title = f"dask-hip {version_number} documentation"
 
@@ -54,7 +54,7 @@ extensions = [
 # -- sphinx-autoapi configuration -------------------------------------------
 autoapi_type = "python"
 autoapi_dirs = [
-    os.path.join(os.path.dirname(__file__), "reference", "dask_cuda_api", "stubs"),
+    os.path.join(os.path.dirname(__file__), "reference", "dask_hip_api", "stubs"),
 ]
 autoapi_ignore = ["*/__pycache__/*"]
 autoapi_options = [
@@ -71,7 +71,7 @@ autoapi_add_toctree_entry = False
 autoapi_generate_api_docs = False
 
 exclude_patterns = [
-    "reference/dask_cuda_api/README.md",
+    "reference/dask_hip_api/README.md",
 ]
 
 myst_heading_anchors = 4

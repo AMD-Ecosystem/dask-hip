@@ -51,9 +51,9 @@ CLI
 dask-cuda-worker
 ~~~~~~~~~~~~~~~~
 
-.. include:: dask_cuda_api/stubs/cli_worker.rst
+.. include:: dask_hip_api/stubs/cli_worker.rst
 
 dask-cuda-config
 ~~~~~~~~~~~~~~~~
 
-.. include:: dask_cuda_api/stubs/cli_config.rst
+.. include:: dask_hip_api/stubs/cli_config.rst
