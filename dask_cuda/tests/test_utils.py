@@ -65,10 +65,25 @@ def test_unpack_bitmask_single_value():
 
 
 def test_cpu_affinity():
+    # In containerized/cgroup-restricted environments, the process may only
+    # have access to a subset of the system's CPUs. os.sched_setaffinity
+    # silently intersects the requested set with the allowed set, so we
+    # compare against that intersection rather than the full NUMA affinity.
+    available_cpus = os.sched_getaffinity(0)
     for i in range(get_n_gpus()):
         affinity = get_cpu_affinity(i)
+        expected = set(affinity) & available_cpus
+        if len(expected) == 0:
+            os.sched_setaffinity(0, available_cpus)
+            pytest.skip(
+                f"GPU {i} NUMA affinity {affinity} has no overlap with "
+                f"available cpuset {available_cpus}"
+            )
         os.sched_setaffinity(0, affinity)
-        assert os.sched_getaffinity(0) == set(affinity)
+        actual = os.sched_getaffinity(0)
+        assert actual == expected
+
+    os.sched_setaffinity(0, available_cpus)
 
 
 def test_cpu_affinity_and_cuda_visible_devices():
