@@ -41,7 +41,7 @@ class LoggedNanny(Nanny):
 class LocalCUDACluster(LocalCluster):
     """A variant of ``dask.distributed.LocalCluster`` that uses one GPU per process.
 
-    This assigns a different ``CUDA_VISIBLE_DEVICES`` environment variable to each Dask
+    This assigns a different ``HIP_VISIBLE_DEVICES`` environment variable to each Dask
     worker process.
 
     For machines with a complex architecture mapping CPUs, GPUs, and network hardware,
@@ -54,13 +54,13 @@ class LocalCUDACluster(LocalCluster):
 
     Parameters
     ----------
-    CUDA_VISIBLE_DEVICES : str, list of int, or None, default None
+    HIP_VISIBLE_DEVICES : str, list of int, or None, default None
         GPUs to restrict activity to. Can be a string (like ``"0,1,2,3"``), list (like
         ``[0, 1, 2, 3]``), or ``None`` to use all available GPUs.
     n_workers : int or None, default None
         Number of workers. Can be an integer or ``None`` to fall back on the GPUs
-        specified by ``CUDA_VISIBLE_DEVICES``. The value of ``n_workers`` must be
-        smaller or equal to the number of GPUs specified in ``CUDA_VISIBLE_DEVICES``
+        specified by ``HIP_VISIBLE_DEVICES``. The value of ``n_workers`` must be
+        smaller or equal to the number of GPUs specified in ``HIP_VISIBLE_DEVICES``
         when the latter is specified, and if smaller, only the first ``n_workers`` GPUs
         will be used.
     threads_per_worker : int, default 1
@@ -223,7 +223,7 @@ class LocalCUDACluster(LocalCluster):
 
     def __init__(
         self,
-        CUDA_VISIBLE_DEVICES=None,
+        HIP_VISIBLE_DEVICES=None,
         n_workers=None,
         threads_per_worker=1,
         memory_limit="auto",
@@ -248,9 +248,13 @@ class LocalCUDACluster(LocalCluster):
         jit_unspill=None,
         log_spilling=False,
         pre_import=None,
+        CUDA_VISIBLE_DEVICES=None,
         enable_nvlink=None,
         **kwargs,
     ):
+        if HIP_VISIBLE_DEVICES is not None:
+            CUDA_VISIBLE_DEVICES = HIP_VISIBLE_DEVICES
+
         if enable_nvlink is not None:
             enable_rocm_ipc = enable_nvlink
             warn_about_nvlink_if_not_suppressed()
