@@ -11,11 +11,45 @@
 Building from source
 *********************
 
-The following information is related to building ``dask-hip`` from source for developers interested in modifying and contributing to the projects. Users just looking to use the library should see :ref:`install`.
+The following information is related to building ``dask-hip`` from source for developers interested
+in modifying and contributing to the projects. Users just looking to use the library should see
+:ref:`install`.
 
-See :ref:`system-requirements` for information related to supported operating systems, ROCm versions, and AMD GPUs before installing ``dask-hip``.
+See :ref:`system-requirements` for information related to supported operating systems, ROCm versions,
+and AMD GPUs before installing ``dask-hip``.
+
+Environment setup
+=================
+
+Create and activate a Conda environment:
+
+.. code-block:: bash
+
+   conda create --name dask-hip python=3.12
+   conda activate dask-hip
+
+Alternatively, create a Python virtual environment:
+
+.. code-block:: bash
+
+   python3 -m venv dask-hip-env
+   source dask-hip-env/bin/activate
 
 Python dependencies
+===================
+
+AMD SMI
+-------
+
+``dask-hip`` requires the ``amdsmi`` Python package, which is distributed with ROCm (not via AMD
+PyPI). Install it from the ROCm installation first:
+
+.. code-block:: bash
+
+   cd /opt/rocm/share/amd_smi
+   pip install .
+
+AMD Python packages
 -------------------
 
 dask-hip depends on the following AMD-specific Python packages:
@@ -23,13 +57,20 @@ dask-hip depends on the following AMD-specific Python packages:
 - ``hip-python`` -- HIP Python bindings
 - ``hip-python-as-cuda`` -- CUDA compatibility layer for HIP
 - ``numba-hip`` -- Numba backend for HIP
-- ``amdsmi`` -- AMD System Management Interface
 
-These are automatically installed when installing from AMD PyPI. When building from source, install them first:
+These are automatically installed when installing from AMD PyPI. When building from source, install
+them first:
 
 .. code-block:: bash
 
-   pip install hip-python hip-python-as-cuda numba-hip amdsmi --extra-index-url=https://pypi.amd.com/simple
+   pip install hip-python hip-python-as-cuda numba-hip --extra-index-url=https://pypi.amd.com/simple
+
+pynvml compatibility
+--------------------
+
+``dask-hip`` bundles a ``pynvml2amdsmi`` compatibility shim that maps ``pynvml`` API calls to their
+AMD SMI equivalents, allowing upstream packages such as ``dask.distributed`` to query GPU information
+transparently on AMD hardware.
 
 Build and install
 =================
@@ -79,7 +120,9 @@ Open ``docs_amd/_build/index.html`` to view the generated documentation.
 Regenerating API stubs
 -----------------------
 
-The Python API reference is built from ``.pyi`` stub files that are checked into the repository. If the public API changes (new classes, functions, parameter or docstring updates), regenerate the stubs on a system with ``dask-hip`` and all AMD dependencies installed:
+The Python API reference is built from ``.pyi`` stub files that are checked into the repository. If
+the public API changes (new classes, functions, parameter or docstring updates), regenerate the
+stubs on a system with ``dask-hip`` and all AMD dependencies installed:
 
 .. code-block:: bash
 

@@ -57,3 +57,15 @@ dask-cuda-config
 ~~~~~~~~~~~~~~~~
 
 .. include:: dask_hip_api/stubs/cli_config.rst
+
+
+Compatibility notes
+-------------------
+
+For portability, ``LocalCUDACluster``, ``CUDAWorker``, and the ``dask cuda worker`` CLI accept
+``enable_nvlink`` / ``--enable-nvlink`` parameters, mapping them to ``enable_rocm_ipc`` /
+``--enable-rocm-ipc`` with a deprecation warning. This allows scripts written for dask-cuda on
+NVIDIA platforms to work on dask-hip without modification.
+
+The deprecation warning can be suppressed by setting the ``DASK_HIP_SUPPRESS_NVLINK_WARNING=1``
+environment variable.

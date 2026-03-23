@@ -1,3 +1,6 @@
+.. SPDX-FileCopyrightText: Copyright NVIDIA CORPORATION & AFFILIATES.
+.. SPDX-License-Identifier: Apache-2.0
+..
 .. SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
 .. SPDX-License-Identifier: MIT
 
@@ -11,7 +14,10 @@
 Spilling from device
 ********************
 
-By default, ``dask-hip`` enables spilling from GPU to host memory when a GPU reaches a memory utilization of 80%. This can be changed to suit the needs of a workload, or disabled altogether, by explicitly setting ``device_memory_limit``. This parameter accepts an integer or string memory size, or a float representing a percentage of the GPU's total memory:
+By default, ``dask-hip`` enables spilling from GPU to host memory when a GPU reaches a memory
+utilization of 80%. This can be changed to suit the needs of a workload, or disabled altogether,
+by explicitly setting ``device_memory_limit``. This parameter accepts an integer or string memory
+size, or a float representing a percentage of the GPU's total memory:
 
 .. code-block:: python
 
@@ -27,7 +33,8 @@ Memory spilling can be disabled by setting ``device_memory_limit`` to 0:
 
    cluster = LocalCUDACluster(device_memory_limit=0)  # spilling disabled
 
-The same applies for ``dask cuda worker``, where spilling can be controlled with ``--device-memory-limit``:
+The same applies for ``dask cuda worker``, where spilling can be controlled with
+``--device-memory-limit``:
 
 .. code-block:: bash
 
@@ -41,9 +48,14 @@ The same applies for ``dask cuda worker``, where spilling can be controlled with
 JIT-Unspill
 ===========
 
-The regular spilling in Dask and ``dask-hip`` has some significant limitations. Instead of tracking individual objects, it tracks task outputs. This means that a task returning a collection of GPU objects will either spill all of the objects or none of them. Other issues include object duplication, wrong spilling order, and non-tracking of shared device buffers.
+The regular spilling in Dask and ``dask-hip`` has some significant limitations. Instead of tracking
+individual objects, it tracks task outputs. This means that a task returning a collection of GPU
+objects will either spill all of the objects or none of them. Other issues include object duplication,
+wrong spilling order, and non-tracking of shared device buffers.
 
-``dask-hip`` introduces JIT-Unspilling, which can improve performance and memory usage significantly. For workloads that require significant spilling (such as large joins on infrastructure with less available memory than data) improvements of greater than 50% have been observed.
+``dask-hip`` introduces JIT-Unspilling, which can improve performance and memory usage significantly.
+For workloads that require significant spilling (such as large joins on infrastructure with less
+available memory than data) improvements of greater than 50% have been observed.
 
 To enable JIT-Unspilling, use the ``jit_unspill`` argument:
 
@@ -70,9 +82,12 @@ Or use the environment variable ``DASK_JIT_UNSPILL=True``:
 Limitations
 -----------
 
-JIT-Unspill wraps GPU objects (such as ``cudf.DataFrame``) in a ``ProxyObject``. Objects proxied by a ``ProxyObject`` will be JIT-deserialized when accessed. The instance behaves as the proxied object and can be accessed just like the proxied object.
+JIT-Unspill wraps GPU objects (such as ``cudf.DataFrame``) in a ``ProxyObject``. Objects proxied by a
+``ProxyObject`` will be JIT-deserialized when accessed. The instance behaves as the proxied object
+and can be accessed just like the proxied object.
 
-``ProxyObject`` has some limitations and doesn't mimic the proxied object perfectly. Most notably, type checking using ``isinstance()`` works as expected but direct type checking doesn't:
+``ProxyObject`` has some limitations and doesn't mimic the proxied object perfectly. Most notably,
+type checking using ``isinstance()`` works as expected but direct type checking doesn't:
 
 .. code-block:: python
 
@@ -84,16 +99,23 @@ JIT-Unspill wraps GPU objects (such as ``cudf.DataFrame``) in a ``ProxyObject``.
    >>> type(asproxy(x)) is type(x)
    False
 
-If encountering problems, use ``unproxy()`` to access the proxied object directly, or set ``DASK_JIT_UNSPILL_COMPATIBILITY_MODE=True`` to enable compatibility mode, which automatically calls ``unproxy()`` on all function inputs.
+If encountering problems, use ``unproxy()`` to access the proxied object directly, or set
+``DASK_JIT_UNSPILL_COMPATIBILITY_MODE=True`` to enable compatibility mode, which automatically calls
+``unproxy()`` on all function inputs.
 
 hipDF spilling
 ==============
 
-When executing an ETL (Extract, Transform, Load) workflow with Dask hipDF (i.e., Dask DataFrame), it is usually best to leverage native spilling support in hipDF.
+When executing an ETL (Extract, Transform, Load) workflow with Dask hipDF (i.e., Dask DataFrame), it
+is usually best to leverage native spilling support in hipDF.
 
-Native hipDF spilling has an important advantage over other methodologies: when JIT-unspill or default spilling are used, the worker is only able to spill the input or output of a task. When hipDF spilling is used, individual device buffers can be spilled and unspilled as needed while the task is executing.
+Native hipDF spilling has an important advantage over other methodologies: when JIT-unspill or
+default spilling are used, the worker is only able to spill the input or output of a task. When hipDF
+spilling is used, individual device buffers can be spilled and unspilled as needed while the task is
+executing.
 
-When deploying a ``LocalCUDACluster``, hipDF spilling can be enabled with the ``enable_cudf_spill`` argument:
+When deploying a ``LocalCUDACluster``, hipDF spilling can be enabled with the ``enable_cudf_spill``
+argument:
 
 .. code-block:: python
 
@@ -112,4 +134,8 @@ The same applies for ``dask cuda worker``:
 hipDF spilling limitations
 --------------------------
 
-Although hipDF spilling is the best option for most ETL workflows using Dask cuDF, it will be much less effective if the workflow converts between ``cudf.DataFrame`` and other data formats (e.g., ``cupy.ndarray``). Once the underlying device buffers are "exposed" to external memory references, they become "unspillable" by hipDF. In cases like this, JIT-Unspill is usually a better choice.
+Although hipDF spilling is the best option for most ETL workflows using Dask hipDF, it will be much
+less effective if the workflow converts between ``cudf.DataFrame`` and other data formats
+(e.g., ``cupy.ndarray``). Once the underlying device buffers are "exposed" to external memory
+references, they become "unspillable" by hipDF. In cases like this, JIT-Unspill is usually a better
+choice.

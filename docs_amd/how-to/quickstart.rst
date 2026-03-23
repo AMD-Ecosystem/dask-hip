@@ -11,15 +11,17 @@
 Quick start
 ***********
 
-A ``dask-hip`` cluster can be created using either ``LocalCUDACluster`` in Python or ``dask cuda worker`` from the command line.
+A ``dask-hip`` cluster can be created using either ``LocalCUDACluster`` in Python or
+``dask cuda worker`` from the command line.
 
 .. note::
 
-   As mentioned in :ref:`whatis-dask`, ``dask-hip`` retains dask-cuda API naming to minimize porting friction for developers working across both NVIDIA and AMD platforms.
+   As mentioned in :ref:`whatis-dask`, ``dask-hip`` retains dask-cuda API naming to minimize porting
+   friction for developers working across both NVIDIA and AMD platforms.
 
 
-LocalCUDACluster
-================
+Launching a local cluster
+=========================
 
 To create a ``dask-hip`` cluster using all available GPUs and connect a Dask ``Client`` to it:
 
@@ -33,12 +35,15 @@ To create a ``dask-hip`` cluster using all available GPUs and connect a Dask ``C
 
 .. tip::
 
-   Be sure to include an ``if __name__ == "__main__":`` block when using ``LocalCUDACluster`` in a standalone Python script. See `standalone Python scripts <https://docs.dask.org/en/stable/scheduling.html#standalone-python-scripts>`_ for more details.
+   Be sure to include an ``if __name__ == "__main__":`` block when using ``LocalCUDACluster`` in a
+   standalone Python script. See `standalone Python scripts <https://docs.dask.org/en/stable/scheduling.html#standalone-python-scripts>`_
+   for more details.
 
-dask cuda worker
-================
+Launching workers
+==================
 
-To create an equivalent cluster from the command line, ``dask-hip`` workers must be connected to a scheduler started with ``dask scheduler``:
+To create an equivalent cluster from the command line, ``dask-hip`` workers must be connected to a
+scheduler started with ``dask scheduler``:
 
 .. code-block:: bash
 
@@ -58,7 +63,8 @@ To connect a client to this cluster:
 Selecting GPUs
 ==============
 
-By default, ``dask-hip`` creates one worker for each visible GPU. You can control which GPUs are used via the ``HIP_VISIBLE_DEVICES`` environment variable:
+By default, ``dask-hip`` creates one worker for each visible GPU. You can control which GPUs are used
+via the ``HIP_VISIBLE_DEVICES`` environment variable:
 
 .. code-block:: bash
 
@@ -69,8 +75,8 @@ Or programmatically:
 
 .. code-block:: python
 
-   cluster = LocalCUDACluster(CUDA_VISIBLE_DEVICES="0,2")
+   cluster = LocalCUDACluster(HIP_VISIBLE_DEVICES="0,2")
 
 .. note::
 
-   Both ``HIP_VISIBLE_DEVICES`` and ``CUDA_VISIBLE_DEVICES`` are supported as environment variables. However, in code only ``CUDA_VISIBLE_DEVICES`` is supported.
+   Both ``HIP_VISIBLE_DEVICES`` and ``CUDA_VISIBLE_DEVICES`` are supported.

@@ -11,23 +11,49 @@
 Installing dask-hip
 *******************
 
-You can install ``dask-hip`` via AMD PyPI as described below. This is recommended for users of the package. For developers interested in modifying or contributing to the open-source ``dask-hip`` component, see the :doc:`Build instructions <build>`.
+You can install ``dask-hip`` via AMD PyPI as described below. This is recommended for users of the
+package. For developers interested in modifying or contributing to the open-source ``dask-hip``
+component, see the :doc:`Build instructions <build>`.
 
-See :ref:`system-requirements` for information related to supported operating systems, ROCm versions, and AMD GPUs before installing ``dask-hip``.
+See :ref:`system-requirements` for information related to supported operating systems, ROCm versions,
+and AMD GPUs before installing ``dask-hip``.
+
+Prerequisites
+=============
+
+AMD SMI
+-------
+
+``dask-hip`` requires the ``amdsmi`` Python package, which is distributed with ROCm (not via AMD
+PyPI). Install it from the ROCm installation before installing ``dask-hip``:
+
+.. code-block:: bash
+
+   cd /opt/rocm/share/amd_smi
+   pip install .
 
 Install dask-hip via AMD PyPI
 ==============================
 
-Packaged versions of dask-hip and its dependencies are distributed via `AMD PyPI <https://pypi.amd.com/simple>`_. This section describes how to install dask-hip via this package index.
+Packaged versions of dask-hip and its dependencies are distributed via
+`AMD PyPI <https://pypi.amd.com/simple>`_. This section describes how to install dask-hip via this
+package index.
 
-Create and activate a Conda environment with Python 3.12 as shown below:
+Create and activate a Conda environment with Python 3.12:
 
 .. code-block:: bash
 
    conda create --name dask-hip python=3.12
    conda activate dask-hip
 
-dask-hip can then be installed into this environment using pip and the AMD PyPI URL:
+Alternatively, create a Python virtual environment:
+
+.. code-block:: bash
+
+   python3 -m venv dask-hip-env
+   source dask-hip-env/bin/activate
+
+dask-hip can then be installed into either environment using pip and the AMD PyPI URL:
 
 .. code-block:: bash
 
@@ -36,8 +62,16 @@ dask-hip can then be installed into this environment using pip and the AMD PyPI 
 hipUCXX support
 ---------------
 
-To install the ``distributed-hipucxx`` package for high-performance UCX communication (ROCm-IPC, InfiniBand):
+To install the ``amd-distributed-hipucxx`` package for high-performance UCX communication
+(ROCm-IPC, InfiniBand):
 
 .. code-block:: bash
 
-   pip install distributed-hipucxx --extra-index-url=https://pypi.amd.com/simple
+   pip install amd-distributed-hipucxx --extra-index-url=https://pypi.amd.com/simple
+
+pynvml compatibility
+--------------------
+
+``dask-hip`` bundles a ``pynvml2amdsmi`` compatibility shim that maps ``pynvml`` API calls to their
+AMD SMI equivalents. This allows upstream packages such as ``dask.distributed`` to query GPU
+information transparently on AMD hardware without modification.
