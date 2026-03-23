@@ -1,24 +1,95 @@
-<!-- SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc. -->
-<!-- SPDX-License-Identifier: MIT -->
+# dask-hip
 
-Dask HIP
-=========
+dask-hip is an extension of [Dask.distributed](https://distributed.dask.org/)
+that simplifies deploying Dask clusters on multi-GPU systems with AMD GPUs. It
+is derived from [dask-cuda](https://github.com/rapidsai/dask-cuda) by NVIDIA
+Corporation and is part of the [ROCm-DS](https://github.com/ROCm-DS) ecosystem.
 
-Various utilities to improve deployment and management of Dask workers on
-HIP-enabled systems.
+Key capabilities include one-worker-per-GPU scheduling with automatic
+`HIP_VISIBLE_DEVICES` management, CPU affinity, UCX-based high-performance
+communication (ROCm-IPC, InfiniBand, TCP), GPU memory spilling, and hipMM (RMM)
+pool integration.
 
-This library is experimental, and its API is subject to change at any time
-without notice.
+For full documentation, see the
+[dask-hip documentation](https://rocm.docs.amd.com/projects/dask-hip/en/latest/).
 
-Example
--------
+## Directory layout
 
-```python
-from dask_cuda import LocalCUDACluster
-from dask.distributed import Client
-
-cluster = LocalCUDACluster()
-client = Client(cluster)
+```
+dask-hip/
+├── dask_cuda/            Python package (preserves upstream module name)
+│   ├── cli.py              CLI entry point (dask cuda worker, dask cuda config)
+│   ├── local_cuda_cluster.py   LocalCUDACluster
+│   ├── cuda_worker.py      CUDAWorker
+│   ├── initialize.py       Client-side UCX initialization
+│   ├── explicit_comms/     Explicit communication API
+│   ├── plugins.py          Worker plugins (CPU affinity, RMM, hipDF)
+│   └── tests/              Test suite
+├── pynvml2amdsmi/        pynvml compatibility shim for AMD SMI
+├── examples/             Usage examples (UCX integration)
+├── docs_amd/             Sphinx documentation source
+├── scripts/              Utility scripts
+├── pyproject.toml        Package metadata and dependencies
+└── LICENSE / NOTICE.txt  License files
 ```
 
-Documentation is available [here](https://rocm.docs.amd.com/projects/dask-hip-internal/en/dev-suphilip-add_amd_documentation/).
+## Environment setup
+
+Create and activate a Python environment before installing or building
+dask-hip. Either Conda or a Python virtual environment can be used.
+
+**Conda:**
+
+```bash
+conda create --name dask-hip python=3.12
+conda activate dask-hip
+```
+
+**Python virtual environment:**
+
+```bash
+python3 -m venv dask-hip-env
+source dask-hip-env/bin/activate
+```
+
+## Prerequisites
+
+### AMD SMI
+
+dask-hip requires the `amdsmi` Python package, which is distributed with ROCm.
+Install it from the ROCm installation:
+
+```bash
+cd /opt/rocm/share/amd_smi
+pip install .
+```
+
+### UCX (optional, for high-performance communication)
+
+UCX-based communication via [hip-ucxx](https://github.com/ROCm-DS/hip-ucxx)
+enables ROCm-IPC and InfiniBand transports. See the
+[hip-ucxx build guide](https://rocm.docs.amd.com/projects/hip-ucxx/en/latest/install/build.html)
+for UCX installation instructions.
+
+## Installing
+
+Install from AMD PyPI:
+
+```bash
+pip install amd-dask-hip --extra-index-url=https://pypi.amd.com/simple
+```
+
+For UCX communication support:
+
+```bash
+pip install amd-distributed-hipucxx --extra-index-url=https://pypi.amd.com/simple
+```
+
+For building from source, see the
+[build guide](https://rocm.docs.amd.com/projects/dask-hip/en/latest/install/build.html).
+
+## License
+
+dask-hip is licensed under a combination of the Apache License 2.0 (for code
+derived from NVIDIA dask-cuda) and the MIT License (for AMD additions). See
+[LICENSE](LICENSE) and [NOTICE.txt](NOTICE.txt) for the full license texts.
