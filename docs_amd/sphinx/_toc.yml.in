@@ -18,14 +18,8 @@ subtrees:
 
 - caption: How to
   entries:
-  - file: how-to/quickstart.rst
-    title: Quick start
-  - file: how-to/ucx.rst
-    title: UCX integration
-  - file: how-to/spilling.rst
-    title: Spilling from device
-  - file: how-to/explicit-comms.rst
-    title: Explicit communication
+  - file: how-to/using-dask-hip.rst
+    title: Using dask-hip
 
 - caption: Reference
   entries:

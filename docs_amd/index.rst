@@ -33,10 +33,7 @@ The dask-hip code is open and hosted at
 
   .. grid-item-card:: How to
 
-    * :doc:`Quick start <how-to/quickstart>`
-    * :doc:`UCX integration <how-to/ucx>`
-    * :doc:`Spilling from device <how-to/spilling>`
-    * :doc:`Explicit communication <how-to/explicit-comms>`
+    * :doc:`Using dask-hip <how-to/using-dask-hip>`
 
   .. grid-item-card:: API reference
 

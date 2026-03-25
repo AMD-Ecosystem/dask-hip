@@ -16,14 +16,8 @@ subtrees:
 
 - caption: How to
   entries:
-  - file: how-to/quickstart.md
-    title: Quick start
-  - file: how-to/ucx.md
-    title: UCX integration
-  - file: how-to/spilling.md
-    title: Spilling from device
-  - file: how-to/explicit-comms.md
-    title: Explicit communication
+  - file: how-to/using-dask-hip.md
+    title: Using dask-hip
 
 - caption: Reference
   entries:
