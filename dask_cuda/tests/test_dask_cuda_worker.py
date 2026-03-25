@@ -29,7 +29,11 @@ from dask_cuda.utils import (
 
 @patch.dict(
     os.environ,
-    {"CUDA_VISIBLE_DEVICES": "0,3,5,7", "DASK_CUDA_TEST_DISABLE_DEVICE_SPECIFIC": "1"},
+    {
+        "CUDA_VISIBLE_DEVICES": "0,3,5,7",
+        "DASK_CUDA_TEST_DISABLE_DEVICE_SPECIFIC": "1",
+        "DASK_CUDA_TEST_SINGLE_GPU": "1"
+    },
 )
 def test_cuda_visible_devices(loop):  # noqa: F811
     with popen(["dask", "scheduler", "--port", "9359", "--no-dashboard"]):
