@@ -10,7 +10,6 @@ import sys
 import tempfile
 import textwrap
 
-# import cuda.core.experimental
 import numpy
 import psutil
 import pytest
@@ -30,6 +29,10 @@ mp = mp.get_context("spawn")  # type: ignore
 # that UCX options of the different tests doesn't conflict.
 # Furthermore, all tests do some computation to trigger initialization
 # of UCX before retrieving the current config.
+
+@pytest.fixture(autouse=True)
+def unset_ucx_tls(monkeypatch):
+    monkeypatch.delenv("UCX_TLS", raising=False)
 
 
 def _test_initialize_ucx_tcp():
