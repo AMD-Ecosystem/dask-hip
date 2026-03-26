@@ -1,6 +1,3 @@
-.. SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
-.. SPDX-License-Identifier: MIT
-
 .. meta::
    :description: Getting started with dask-hip for multi-GPU computing
    :keywords: Dask, GPU, distributed computing, HIP, ROCm, ROCm-DS, AMD, tutorial, getting started
@@ -11,23 +8,23 @@
 Using dask-hip
 ***************
 
-This page walks through practical examples of GPU-distributed computing with
-``dask-hip``, from creating a minimal cluster to deploying UCX-enabled multi-GPU
+This topic walks through practical examples of GPU-distributed computing with
+dask-hip, from creating a minimal cluster to deploying UCX-enabled multi-GPU
 workloads. Complete example scripts are available in the ``examples/`` directory
 of the repository.
 
 .. note::
 
-   ``dask-hip`` retains dask-cuda API naming (module ``dask_cuda``, command
-   ``dask cuda worker``, class ``LocalCUDACluster``, etc.) to minimize porting
-   friction for developers working across both NVIDIA and AMD platforms. See
+   dask-hip retains dask-cuda API naming (module ``dask_cuda``, command
+   ``dask cuda worker``, class ``LocalCUDACluster``) to minimize porting
+   friction for developers working across both ROCm and CUDA. See
    :ref:`whatis-dask` for more background.
 
 
 Creating a cluster
 ==================
 
-There are two ways to create a ``dask-hip`` cluster: programmatically in Python
+There are two ways to create a dask-hip cluster: programmatically in Python
 or from the command line.
 
 In a Python program:
@@ -79,7 +76,7 @@ Then connect a client from Python:
 Selecting GPUs
 --------------
 
-By default, ``dask-hip`` creates one worker for each visible GPU. Control which
+By default, dask-hip creates one worker for each visible GPU. Control which
 GPUs are used via the ``HIP_VISIBLE_DEVICES`` environment variable:
 
 .. code-block:: bash
@@ -156,7 +153,7 @@ For more on GPU memory management, see the ``device_memory_limit`` and
 UCX-enabled local cluster
 =========================
 
-For high-performance GPU-to-GPU communication, ``dask-hip`` integrates with
+For high-performance GPU-to-GPU communication, dask-hip integrates with
 `UCX <https://www.openucx.org/>`_ via
 `hip-ucxx <https://github.com/ROCm-DS/hip-ucxx>`_. The following example
 (from ``examples/ucx/local_cuda_cluster.py``) creates a UCX-enabled cluster
@@ -254,13 +251,5 @@ side before connecting (from ``examples/ucx/client_initialize.py``):
 
        client.shutdown()
 
-The ``initialize()`` call configures Dask's UCX settings so the client can
+The ``initialize()`` call configures Dask UCX settings so the client can
 communicate with the scheduler and workers using the same transports.
-
-
-Next steps
-==========
-
-- :doc:`Python API reference <../reference/api>` -- ``LocalCUDACluster``, ``CUDAWorker``, ``initialize()``, and more
-- :doc:`Installing dask-hip <../install/install>` -- package installation and prerequisites
-- :doc:`Building from source <../install/build>` -- building dask-hip and dependencies from source

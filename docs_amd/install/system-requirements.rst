@@ -1,6 +1,3 @@
-.. SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
-.. SPDX-License-Identifier: MIT
-
 .. meta::
    :description: dask-hip system requirements
    :keywords: Dask, GPU, HIP, ROCm, ROCm-DS, AMD, requirements, compatibility
@@ -11,15 +8,15 @@
 System requirements
 *******************
 
-This page lists the system requirements for using ``dask-hip``.
+This topic lists the system requirements for using dask-hip.
 
-* Operating Systems: manylinux_2_28. Ubuntu 22.04 is recommended.
-* ROCm version: 7.2.0
-* Supported AMD GPUs:
+* Operating Systems: Linux distributions compatible with Manylinux 2.28. Ubuntu 22.04 is recommended.
+* ROCm version: `7.2.0 <https://rocm.docs.amd.com/projects/install-on-linux/en/docs-7.2.0/>`__ and `7.2.1 <https://rocm.docs.amd.com/projects/install-on-linux/en/docs-7.2.1/>`__
+* Supported AMD Instinct GPUs:
 
-  - MI350X / MI355X (GPU target gfx950)
-  - MI300A / MI300X (GPU target gfx942)
-  - MI250X / MI250 / MI210 (GPU target gfx90a)
+  - MI350X/MI355X (GPU target gfx950)
+  - MI300A/MI300X (GPU target gfx942)
+  - MI250X/MI250/MI210 (GPU target gfx90a)
 
 * Python versions: 3.10, 3.11, 3.12
 

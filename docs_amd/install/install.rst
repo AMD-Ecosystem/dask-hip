@@ -1,6 +1,3 @@
-.. SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
-.. SPDX-License-Identifier: MIT
-
 .. meta::
    :description: dask-hip installation guide
    :keywords: Dask, GPU, distributed computing, HIP, ROCm, ROCm-DS, AMD, install
@@ -11,21 +8,18 @@
 Installing dask-hip
 *******************
 
-You can install ``dask-hip`` via AMD PyPI as described below. This is recommended for users of the
-package. For developers interested in modifying or contributing to the open-source ``dask-hip``
+You can install dask-hip via AMD PyPI as described below. This is recommended for users of the
+package. For developers interested in modifying or contributing to the open-source dask-hip
 component, see the :doc:`Build instructions <build>`.
 
-See :ref:`system-requirements` for information related to supported operating systems, ROCm versions,
-and AMD GPUs before installing ``dask-hip``.
+See :ref:`system-requirements` for information regarding supported operating systems, ROCm versions,
+and AMD GPUs before installing dask-hip.
 
-Prerequisites
-=============
+ROCm component prerequisites
+============================
 
-AMD SMI
--------
-
-``dask-hip`` requires the ``amdsmi`` Python package, which is distributed with ROCm (not via AMD
-PyPI). Install it from the ROCm installation before installing ``dask-hip``:
+dask-hip requires the ``amdsmi`` Python package, which is distributed with ROCm (not via AMD
+PyPI). Install it from the ROCm installation before installing dask-hip. See `AMD SMI documentation <https://rocm.docs.amd.com/projects/amdsmi/en/latest/index.html>`__ for more information. 
 
 .. code-block:: bash
 
@@ -72,6 +66,6 @@ To install the ``amd-distributed-hipucxx`` package for high-performance UCX comm
 pynvml compatibility
 --------------------
 
-``dask-hip`` bundles a ``pynvml2amdsmi`` compatibility shim that maps ``pynvml`` API calls to their
+dask-hip bundles a ``pynvml2amdsmi`` compatibility shim that maps ``pynvml`` API calls to their
 AMD SMI equivalents. This allows upstream packages such as ``dask.distributed`` to query GPU
 information transparently on AMD hardware without modification.

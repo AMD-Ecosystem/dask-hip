@@ -1,6 +1,3 @@
-.. SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
-.. SPDX-License-Identifier: MIT
-
 .. meta::
   :description: dask-hip documentation and API reference
   :keywords: Dask, GPU, distributed computing, HIP, ROCm, ROCm-DS, AMD, RAPIDS, data science
@@ -11,11 +8,11 @@
 dask-hip documentation
 ********************************************************************
 
-``dask-hip`` is an extension of `Dask.distributed <https://distributed.dask.org/en/latest/>`_ for
+dask-hip is an extension of `Dask.distributed <https://distributed.dask.org/en/latest/>`_ for
 multi-GPU computing on AMD hardware. It is part of the AMD ROCm Data Science toolkit (ROCm-DS),
 an open-source software collection for high-performance data science applications. Forked from the
-`NVIDIA RAPIDS dask-cuda <https://github.com/rapidsai/dask-cuda>`_ project, ``dask-hip`` brings the
-same distributed GPU computing capabilities to the :doc:`HIP <hip:index>`/:doc:`ROCm <rocm:index>`
+`NVIDIA RAPIDS dask-cuda <https://github.com/rapidsai/dask-cuda>`_ project, dask-hip brings the
+same distributed GPU computing capabilities to the :doc:`ROCm <rocm:index>`/:doc:`HIP <hip:index>`
 stack while preserving API compatibility. For more information,
 see :doc:`What is dask-hip? <what-is-dask-hip>`
 
