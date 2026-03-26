@@ -10,7 +10,7 @@ System requirements
 
 This topic lists the system requirements for using dask-hip.
 
-* Operating Systems: Linux distributions compatible with Manylinux 2.28. Ubuntu 22.04 is recommended.
+* Operating Systems: Ubuntu 24.04 and 22.04
 * ROCm version: `7.2.0 <https://rocm.docs.amd.com/projects/install-on-linux/en/docs-7.2.0/>`__ and `7.2.1 <https://rocm.docs.amd.com/projects/install-on-linux/en/docs-7.2.1/>`__
 * Supported AMD Instinct GPUs:
 
