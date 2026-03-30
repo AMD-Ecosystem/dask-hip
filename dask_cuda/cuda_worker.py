@@ -85,7 +85,14 @@ class CUDAWorker(Server):
         enable_proctitle_on_children()
 
         try:
-            nprocs = len(os.environ["CUDA_VISIBLE_DEVICES"].split(","))
+            # The scheduler is the best way to determine the number of workers,
+            # but if it is not a Cluster object, we fall back to the CUDA_VISIBLE_DEVICES
+            # environment variable.
+            # TODO: Add a way to specify the number of workers to CUDAWorker.
+            if scheduler is not None and isinstance(scheduler, Cluster):
+                nprocs = len(scheduler.worker_spec)
+            else:
+                nprocs = len(os.environ["CUDA_VISIBLE_DEVICES"].split(","))
         except KeyError:
             nprocs = get_n_gpus()
 

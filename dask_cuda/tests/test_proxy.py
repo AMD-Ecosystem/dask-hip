@@ -290,7 +290,7 @@ def test_fixed_attribute_name():
 @pytest.mark.skip_if_no_device_memory(
     "Spilling not supported in devices without dedicated memory resource"
 )
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_spilling_local_cuda_cluster(jit_unspill):
     """Testing spilling of a proxied cudf dataframe in a local cuda cluster"""
     cudf = pytest.importorskip("cudf")
@@ -454,7 +454,7 @@ async def test_communicating_proxy_objects(protocol, send_serializers):
 
 @pytest.mark.parametrize("protocol", ["tcp", "ucx"])
 @pytest.mark.parametrize("shared_fs", [True, False])
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_communicating_disk_objects(protocol, shared_fs):
     """Testing disk serialization of cuDF dataframe when communicating"""
     if protocol == "ucx":

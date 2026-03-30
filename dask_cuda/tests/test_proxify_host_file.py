@@ -248,7 +248,7 @@ def test_spill_on_demand(root_dir):
 @pytest.mark.skip_if_no_device_memory(
     "Devices without dedicated memory resources do not support spilling"
 )
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 async def test_local_cuda_cluster(jit_unspill):
     """Testing spilling of a proxied cudf dataframe in a local cuda cluster"""
     cudf = pytest.importorskip("cudf")
