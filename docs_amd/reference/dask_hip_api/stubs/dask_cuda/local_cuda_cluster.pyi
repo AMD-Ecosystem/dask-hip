@@ -26,26 +26,28 @@ class LoggedNanny(Nanny):
 class LocalCUDACluster(LocalCluster):
     """A variant of ``dask.distributed.LocalCluster`` that uses one GPU per process.
 
-    This assigns a different ``CUDA_VISIBLE_DEVICES`` environment variable to each Dask
-    worker process.
+    This assigns a rotated list of visible devices to each Dask worker process, such
+    that each worker sees a different default device.
 
     For machines with a complex architecture mapping CPUs, GPUs, and network hardware,
-    such as NVIDIA DGX-1 and DGX-2, this class creates a local cluster that tries to
-    respect this hardware as much as possible.
+    this class creates a local cluster that tries to respect this hardware as much as
+    possible.
 
     Each worker process is automatically assigned the correct CPU cores and network
     interface cards to maximize performance. If UCX and distributed-ucxx are available,
-    InfiniBand and NVLink connections can be used to optimize data transfer performance.
+    InfiniBand and XGMI connections can be used to optimize data transfer performance.
 
     Parameters
     ----------
-    CUDA_VISIBLE_DEVICES : str, list of int, or None, default None
+    HIP_VISIBLE_DEVICES : str, list of int, or None, default None
         GPUs to restrict activity to. Can be a string (like ``"0,1,2,3"``), list (like
-        ``[0, 1, 2, 3]``), or ``None`` to use all available GPUs.
+        ``[0, 1, 2, 3]``), or ``None`` to use all available GPUs. For compatibility
+        with existing code targeting CUDA, ``CUDA_VISIBLE_DEVICES`` can also be used
+        instead of ``HIP_VISIBLE_DEVICES``.
     n_workers : int or None, default None
         Number of workers. Can be an integer or ``None`` to fall back on the GPUs
-        specified by ``CUDA_VISIBLE_DEVICES``. The value of ``n_workers`` must be
-        smaller or equal to the number of GPUs specified in ``CUDA_VISIBLE_DEVICES``
+        specified by ``HIP_VISIBLE_DEVICES``. The value of ``n_workers`` must be
+        smaller or equal to the number of GPUs specified in ``HIP_VISIBLE_DEVICES``
         when the latter is specified, and if smaller, only the first ``n_workers`` GPUs
         will be used.
     threads_per_worker : int, default 1
@@ -224,7 +226,7 @@ class LocalCUDACluster(LocalCluster):
     cuda_visible_devices: Incomplete
     def __init__(
         self,
-        CUDA_VISIBLE_DEVICES=None,
+        HIP_VISIBLE_DEVICES=None,
         n_workers=None,
         threads_per_worker: int = 1,
         memory_limit: str = "auto",
@@ -249,6 +251,7 @@ class LocalCUDACluster(LocalCluster):
         jit_unspill=None,
         log_spilling: bool = False,
         pre_import=None,
+        CUDA_VISIBLE_DEVICES=None,
         enable_nvlink=None,
         **kwargs
     ) -> None: ...
