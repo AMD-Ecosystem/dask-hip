@@ -168,6 +168,7 @@ async def test_no_memory_limits_cluster():
             assert all(res.values())
 
 
+@patch.dict(os.environ, {"CUDA_VISIBLE_DEVICES": "0"})
 @gen_test(timeout=90)
 async def test_no_memory_limits_cudaworker():
 
@@ -356,6 +357,7 @@ def test_pre_import_not_found():
     asyncio.run(_test_pre_import_not_found())
 
 
+@patch.dict(os.environ, {"CUDA_VISIBLE_DEVICES": "0"})
 @gen_test(timeout=90)
 async def test_cluster_worker():
     async with LocalCUDACluster(
