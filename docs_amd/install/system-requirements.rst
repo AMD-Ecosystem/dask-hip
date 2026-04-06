@@ -18,7 +18,7 @@ This topic lists the system requirements for using dask-hip.
   - MI300A/MI300X (GPU target gfx942)
   - MI250X/MI250/MI210 (GPU target gfx90a)
 
-* Python versions: 3.10, 3.11, 3.12
+* Python versions: 3.10, 3.11, 3.12, 3.13
 
 Conda or virtual environment
 -----------------------------
