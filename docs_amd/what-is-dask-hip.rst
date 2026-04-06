@@ -14,9 +14,8 @@ Science toolkit (ROCm-DS) and works alongside other ROCm-DS components such as
 `hipDF <https://github.com/AMD-AIOSS/hipDF>`__, `hipRaft <https://github.com/AMD-AIOSS/hipRaft>`__,
 and `hipUCXX <https://github.com/AMD-AIOSS/hipUCXX>`__.
 
-dask-hip has been adapted from `dask-cuda <https://github.com/rapidsai/dask-cuda>`__ part of the
-RAPIDS project by NVIDIA for the ROCm/HIP stack. It preserves the directory structure, file naming,
-and API naming to minimize porting friction for developers working across both NVIDIA and AMD
+dask-hip has been adapted from dask-cuda part of the RAPIDS project. It preserves the directory structure, file naming,
+and API naming to minimize porting friction for developers working across both CUDA and ROCm/HIP
 platforms.
 
 Key capabilities include:
