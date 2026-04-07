@@ -1,6 +1,11 @@
-# SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
-# SPDX-License-Identifier: Apache-2.0 AND MIT
+# <<<<<<< OLD CODE from 2cb3024 (c8afa57) - COMMENTED OUT
+# # SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
+# # SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# # SPDX-License-Identifier: Apache-2.0 AND MIT
+# =======
+# SPDX-FileCopyrightText: Copyright (c) 2019-2026, NVIDIA CORPORATION & AFFILIATES.
+# SPDX-License-Identifier: Apache-2.0
+# >>>>>>> END NEW CODE (c8afa57)
 
 import math
 import operator
@@ -807,8 +812,6 @@ def get_gpu_uuid(device_index=0):
 
 
 def get_worker_config(dask_worker):
-    from .proxify_host_file import ProxifyHostFile
-
     # assume homogeneous cluster
     plugin_vals = dask_worker.plugins.values()
     ret = {}
@@ -835,17 +838,11 @@ def get_worker_config(dask_worker):
     ]:
         ret[mem] = getattr(dask_worker.memory_manager, mem)
 
-    # jit unspilling set
-    ret["jit-unspill"] = isinstance(dask_worker.data, ProxifyHostFile)
-
     # get optional device-memory-limit
-    if ret["jit-unspill"]:
-        ret["device-memory-limit"] = dask_worker.data.manager._device_memory_limit
-    else:
-        has_device = hasattr(dask_worker.data, "device_buffer")
-        if has_device and hasattr(dask_worker.data.device_buffer, "n"):
-            # If `n` is not an attribute, device spilling is disabled/unavailable.
-            ret["device-memory-limit"] = dask_worker.data.device_buffer.n
+    has_device = hasattr(dask_worker.data, "device_buffer")
+    if has_device and hasattr(dask_worker.data.device_buffer, "n"):
+        # If `n` is not an attribute, device spilling is disabled/unavailable.
+        ret["device-memory-limit"] = dask_worker.data.device_buffer.n
 
     # using ucx ?
     protocol, loc = parse_address(dask_worker.scheduler.address)
