@@ -126,7 +126,7 @@ def test_rmm_pool(loop):  # noqa: F811
                 assert wait_workers(client, n_gpus=get_n_gpus())
 
                 memory_resource_type = client.run(
-                    rmm.mr.get_current_device_resource_type
+                    lambda: type(rmm.mr.get_current_device_resource())
                 )
                 for v in memory_resource_type.values():
                     assert v is rmm.mr.PoolMemoryResource
@@ -151,7 +151,7 @@ def test_rmm_managed(loop):  # noqa: F811
                 assert wait_workers(client, n_gpus=get_n_gpus())
 
                 memory_resource_type = client.run(
-                    rmm.mr.get_current_device_resource_type
+                    lambda: type(rmm.mr.get_current_device_resource())
                 )
                 for v in memory_resource_type.values():
                     assert v is rmm.mr.ManagedMemoryResource
@@ -179,7 +179,7 @@ def test_rmm_async(loop):  # noqa: F811
                 assert wait_workers(client, n_gpus=get_n_gpus())
 
                 memory_resource_type = client.run(
-                    rmm.mr.get_current_device_resource_type
+                    lambda: type(rmm.mr.get_current_device_resource())
                 )
                 for v in memory_resource_type.values():
                     assert v is rmm.mr.CudaAsyncMemoryResource
@@ -215,7 +215,7 @@ def test_rmm_async_with_maximum_pool_size(loop):  # noqa: F811
 
                 memory_resource_types = client.run(
                     lambda: (
-                        rmm.mr.get_current_device_resource_type(),
+                        type(rmm.mr.get_current_device_resource()),
                         type(rmm.mr.get_current_device_resource().get_upstream()),
                     )
                 )
@@ -255,7 +255,7 @@ def test_rmm_logging(loop):  # noqa: F811
                 assert wait_workers(client, n_gpus=get_n_gpus())
 
                 memory_resource_type = client.run(
-                    rmm.mr.get_current_device_resource_type
+                    lambda: type(rmm.mr.get_current_device_resource())
                 )
                 for v in memory_resource_type.values():
                     assert v is rmm.mr.LoggingResourceAdaptor
@@ -506,7 +506,7 @@ def test_rmm_track_allocations(loop):  # noqa: F811
                 assert wait_workers(client, n_gpus=get_n_gpus())
 
                 memory_resource_type = client.run(
-                    rmm.mr.get_current_device_resource_type
+                    lambda: type(rmm.mr.get_current_device_resource())
                 )
                 for v in memory_resource_type.values():
                     assert v is rmm.mr.TrackingResourceAdaptor
