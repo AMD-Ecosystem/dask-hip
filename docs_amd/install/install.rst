@@ -33,7 +33,7 @@ Packaged versions of dask-hip and its dependencies are distributed via
 `AMD PyPI <https://pypi.amd.com/simple>`_. This section describes how to install dask-hip via this
 package index.
 
-Create and activate a Conda environment with Python 3.12:
+Create and activate a Conda environment with the Python version (shown using 3.12 in the following):
 
 .. code-block:: bash
 
@@ -57,7 +57,7 @@ dask-hip can then be installed into either environment using pip and the AMD PyP
 
    For ROCm 7.2.0 use https://pypi.amd.com/rocm-7.2.0/simple/
 
-hipUCXX support
+hip-ucxx support
 ---------------
 
 To install the ``amd-distributed-hipucxx`` package for high-performance UCX communication

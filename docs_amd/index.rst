@@ -11,10 +11,9 @@ dask-hip documentation
 dask-hip is an extension of `Dask.distributed <https://distributed.dask.org/en/latest/>`_ for
 multi-GPU computing on AMD hardware. It is part of the AMD ROCm Data Science toolkit (ROCm-DS),
 an open-source software collection for high-performance data science applications. Forked from the
-`NVIDIA RAPIDS dask-cuda <https://github.com/rapidsai/dask-cuda>`_ project, dask-hip brings the
-same distributed GPU computing capabilities to the :doc:`ROCm <rocm:index>`/:doc:`HIP <hip:index>`
-stack while preserving API compatibility. For more information,
-see :doc:`What is dask-hip? <what-is-dask-hip>`
+RAPIDS® dask-cuda project, dask-hip brings the same distributed GPU computing capabilities to the
+:doc:`ROCm <rocm:index>`/:doc:`HIP <hip:index>` stack while preserving API compatibility. For more
+information, see :doc:`What is dask-hip? <what-is-dask-hip>`
 
 The dask-hip code is open and hosted at
 `https://github.com/AMD-AIOSS/dask-hip <https://github.com/AMD-AIOSS/dask-hip>`_.

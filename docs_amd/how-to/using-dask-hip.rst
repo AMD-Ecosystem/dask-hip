@@ -155,7 +155,7 @@ UCX-enabled local cluster
 
 For high-performance GPU-to-GPU communication, dask-hip integrates with
 `UCX <https://www.openucx.org/>`_ via
-`hip-ucxx <https://github.com/ROCm-DS/hip-ucxx>`_. The following example
+`hip-ucxx <https://github.com/AMD-AIOSS/hip-ucxx>`_. The following example
 (from ``examples/ucx/local_cuda_cluster.py``) creates a UCX-enabled cluster
 with ROCm-IPC transport:
 

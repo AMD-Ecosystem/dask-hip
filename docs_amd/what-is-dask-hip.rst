@@ -11,12 +11,11 @@ What is dask-hip?
 dask-hip is an extension of `Dask.distributed <https://distributed.dask.org/en/latest/>`__ that
 simplifies the deployment of Dask clusters on multi-GPU systems. dask-hip is part of the AMD ROCm Data
 Science toolkit (ROCm-DS) and works alongside other ROCm-DS components such as
-`hipDF <https://github.com/AMD-AIOSS/hipDF>`__, `hipRaft <https://github.com/AMD-AIOSS/hipRaft>`__,
-and `hipUCXX <https://github.com/AMD-AIOSS/hipUCXX>`__.
+`hipDF <https://github.com/AMD-AIOSS/hipDF>`__, `hipRAFT <https://github.com/AMD-AIOSS/hipRaft>`__,
+and `hip-ucxx <https://github.com/AMD-AIOSS/hipUCXX>`__.
 
 dask-hip has been adapted from dask-cuda part of the RAPIDS project. It preserves the directory structure, file naming,
-and API naming to minimize porting friction for developers working across both CUDA and ROCm/HIP
-platforms.
+and API naming to minimize porting friction for developers migrating their workloads to AMD platforms.
 
 Key capabilities include:
 
