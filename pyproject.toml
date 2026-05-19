@@ -68,10 +68,10 @@ test = [
 ]
 test_ucxx = [
     "amd-hipucxx==0.1.*",
-    "amd_distributed_hipucxx==0.1.*",
+    "amd-distributed-hipucxx==0.1.*",
 ]
 test_hipdf = [
-    "amd_dask_hipdf==3.0.*"
+    "amd-dask-hipdf==3.0.*"
 ]
 
 [project.urls]
