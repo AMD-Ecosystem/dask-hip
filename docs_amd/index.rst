@@ -16,7 +16,7 @@ RAPIDS® dask-cuda project, dask-hip brings the same distributed GPU computing c
 information, see :doc:`What is dask-hip? <what-is-dask-hip>`
 
 The dask-hip code is open and hosted at
-`https://github.com/AMD-AIOSS/dask-hip <https://github.com/AMD-AIOSS/dask-hip>`_.
+`https://github.com/ROCm-DS/dask-hip <https://github.com/ROCm-DS/dask-hip>`_.
 
 .. grid:: 2
   :gutter: 3

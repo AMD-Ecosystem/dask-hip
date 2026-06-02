@@ -73,7 +73,7 @@ Clone the repository and install:
 
 .. code-block:: bash
 
-   git clone https://github.com/AMD-AIOSS/dask-hip.git
+   git clone https://github.com/ROCm-DS/dask-hip.git
    cd dask-hip
    pip install .
 

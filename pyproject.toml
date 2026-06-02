@@ -75,9 +75,9 @@ test_hipdf = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/rapidsai/dask-cuda"
-Documentation = "https://docs.rapids.ai/api/dask-cuda/stable/"
-Source = "https://github.com/rapidsai/dask-cuda"
+Homepage = "https://github.com/ROCm-DS/dask-hip"
+Documentation = "https://rocm.docs.amd.com/projects/dask-hip/en/latest/"
+Source = "https://github.com/ROCm-DS/dask-hip"
 
 [tool.coverage.run]
 disable_warnings = [

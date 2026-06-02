@@ -36,7 +36,7 @@ html_context = {"docs_header_version": "26.03"}
 html_theme = "rocm_docs_theme"
 html_theme_options = {
     "flavor": "rocm-ds",
-    "repository_url": "https://github.com/AMD-AIOSS/dask-hip/",
+    "repository_url": "https://github.com/ROCm-DS/dask-hip/",
 }
 
 external_toc_path = "./sphinx/_toc.yml"
