@@ -11,7 +11,7 @@ System requirements
 This topic lists the system requirements for using dask-hip.
 
 * Operating Systems: Ubuntu 24.04 and 22.04
-* ROCm version: `7.2.0 <https://rocm.docs.amd.com/projects/install-on-linux/en/docs-7.2.0/>`__ and `7.2.1 <https://rocm.docs.amd.com/projects/install-on-linux/en/docs-7.2.1/>`__
+* ROCm version: `7.2.3 <https://rocm.docs.amd.com/projects/install-on-linux/en/docs-7.2.3/>`__, `7.2.2 <https://rocm.docs.amd.com/projects/install-on-linux/en/docs-7.2.2/>`__, `7.2.1 <https://rocm.docs.amd.com/projects/install-on-linux/en/docs-7.2.1/>`__, or `7.2.0 <https://rocm.docs.amd.com/projects/install-on-linux/en/docs-7.2.0/>`__
 * Supported AMD Instinct GPUs:
 
   - MI350X/MI355X (GPU target gfx950)

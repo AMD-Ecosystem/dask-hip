@@ -33,11 +33,11 @@ Packaged versions of dask-hip and its dependencies are distributed via
 `AMD PyPI <https://pypi.amd.com/simple>`_. This section describes how to install dask-hip via this
 package index.
 
-Create and activate a Conda environment with the Python version (shown using 3.12 in the following):
+Create and activate a Conda environment with a compatible Python version, such as 3.11 or 3.12 as shown below. For more information on compatible Python versions, see :ref:`system-requirements`.
 
 .. code-block:: bash
 
-   conda create --name dask-hip python=3.12
+   conda create --name dask-hip python=3.12 # Specify your Python version
    conda activate dask-hip
 
 Alternatively, create a Python virtual environment:
