@@ -51,11 +51,7 @@ dask-hip can then be installed into either environment using pip and the AMD PyP
 
 .. code-block:: bash
 
-   pip install amd-dask-hip --extra-index-url=https://pypi.amd.com/rocm-7.2.1/simple/
-
-.. note::
-
-   For ROCm 7.2.0 use https://pypi.amd.com/rocm-7.2.0/simple/
+   pip install amd-dask-hip --extra-index-url=https://pypi.amd.com/rocm-7.2.3/simple/
 
 hip-ucxx support
 ---------------
@@ -65,7 +61,7 @@ To install the ``amd-distributed-hipucxx`` package for high-performance UCX comm
 
 .. code-block:: bash
 
-   pip install amd-distributed-hipucxx --extra-index-url=https://pypi.amd.com/rocm-7.2.1/simple/
+   pip install amd-distributed-hipucxx --extra-index-url=https://pypi.amd.com/rocm-7.2.3/simple/
 
 pynvml compatibility
 --------------------
