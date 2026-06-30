@@ -55,13 +55,10 @@ source dask-hip-env/bin/activate
 
 ### AMD SMI
 
-dask-hip requires the `amdsmi` Python package, which is distributed with ROCm.
-Install it from the ROCm installation:
-
-```bash
-cd /opt/rocm/share/amd_smi
-pip install .
-```
+dask-hip queries GPU information through the `pynvml` compatibility shim
+provided by `hip-python-interop` (a dependency), which is backed by
+`rocm.bindings.amdsmi`. No separate `amdsmi` Python package is required; the
+AMD SMI runtime library shipped with ROCm must be installed.
 
 ### UCX (optional, for high-performance communication)
 
