@@ -49,7 +49,7 @@ AMD Python packages
 dask-hip depends on the following AMD-specific Python packages:
 
 - ``hip-python`` -- HIP Python bindings
-- ``hip-python-as-cuda`` -- CUDA compatibility layer for HIP
+- ``hip-python-interop`` -- CUDA compatibility layer for HIP (CUDA bindings and the ``pynvml`` shim)
 - ``numba-hip`` -- Numba backend for HIP
 
 These are automatically installed when installing from AMD PyPI. When building from source, install
@@ -57,7 +57,7 @@ them first:
 
 .. code-block:: bash
 
-   pip install hip-python hip-python-as-cuda numba-hip --extra-index-url=https://pypi.amd.com/rocm-7.2.3/simple/
+   pip install hip-python hip-python-interop numba-hip --extra-index-url=https://pypi.amd.com/rocm-7.2.3/simple/
 
 pynvml compatibility
 --------------------
