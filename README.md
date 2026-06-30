@@ -25,7 +25,6 @@ dask-hip/
 │   ├── explicit_comms/     Explicit communication API
 │   ├── plugins.py          Worker plugins (CPU affinity, RMM, hipDF)
 │   └── tests/              Test suite
-├── pynvml2amdsmi/        pynvml compatibility shim for AMD SMI
 ├── examples/             Usage examples (UCX integration)
 ├── docs_amd/             Sphinx documentation source
 ├── scripts/              Utility scripts

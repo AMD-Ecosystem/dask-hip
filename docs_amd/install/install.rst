@@ -66,6 +66,6 @@ To install the ``amd-distributed-hipucxx`` package for high-performance UCX comm
 pynvml compatibility
 --------------------
 
-dask-hip bundles a ``pynvml2amdsmi`` compatibility shim that maps ``pynvml`` API calls to their
-AMD SMI equivalents. This allows upstream packages such as ``dask.distributed`` to query GPU
-information transparently on AMD hardware without modification.
+dask-hip relies on the ``pynvml`` compatibility shim provided by the ``hip-python-interop`` package,
+which maps ``pynvml`` API calls to their AMD SMI equivalents. This allows upstream packages such as
+``dask.distributed`` to query GPU information transparently on AMD hardware without modification.

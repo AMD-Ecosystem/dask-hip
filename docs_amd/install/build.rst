@@ -62,9 +62,9 @@ them first:
 pynvml compatibility
 --------------------
 
-dask-hip bundles a ``pynvml2amdsmi`` compatibility shim that maps ``pynvml`` API calls to their
-AMD SMI equivalents, allowing upstream packages such as ``dask.distributed`` to query GPU information
-transparently on AMD hardware.
+dask-hip relies on the ``pynvml`` compatibility shim provided by the ``hip-python-interop`` package,
+which maps ``pynvml`` API calls to their AMD SMI equivalents, allowing upstream packages such as
+``dask.distributed`` to query GPU information transparently on AMD hardware.
 
 Build and install
 =================

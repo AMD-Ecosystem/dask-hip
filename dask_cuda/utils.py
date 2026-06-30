@@ -23,7 +23,7 @@ from dask.utils import format_bytes, parse_bytes
 from distributed import wait
 from distributed.comm import parse_address
 
-from pynvml2amdsmi import pynvml
+import pynvml
 
 try:
     from nvtx import annotate as nvtx_annotate

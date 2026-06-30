@@ -31,8 +31,7 @@ dependencies = [
     "distributed>=2026.1.1,<2026.1.2",
 
     "hip-python==7.13.*",
-    "hip-python-as-cuda==7.13.*",
-    "amdsmi==26.2.*",
+    "hip-python-interop==7.13.*",
 ]
 classifiers = [
     "Intended Audience :: Developers",
@@ -160,8 +159,6 @@ version = {file = "dask_cuda/VERSION"}
 include = [
     "dask_cuda",
     "dask_cuda.*",
-    "pynvml2amdsmi",
-    "pynvml",
 ]
 exclude = [
     "dask_cuda.benchmarks*",
