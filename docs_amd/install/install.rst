@@ -19,7 +19,7 @@ ROCm component prerequisites
 ============================
 
 dask-hip requires the ``amdsmi`` Python package, which is distributed with ROCm (not via AMD
-PyPI). Install it from the ROCm installation before installing dask-hip. See `AMD SMI documentation <https://rocm.docs.amd.com/projects/amdsmi/en/latest/index.html>`__ for more information. 
+PyPI). Install it from the ROCm installation before installing dask-hip. See `AMD SMI documentation <https://rocm.docs.amd.com/projects/amdsmi/en/docs-7.2.3/index.html>`__ for more information.
 
 .. code-block:: bash
 
@@ -30,7 +30,7 @@ Install dask-hip via AMD PyPI
 ==============================
 
 Packaged versions of dask-hip and its dependencies are distributed via
-`AMD PyPI <https://pypi.amd.com/simple>`_. This section describes how to install dask-hip via this
+`AMD PyPI <https://pypi.amd.com/rocm-7.2.3/simple/>`_. This section describes how to install dask-hip via this
 package index.
 
 Create and activate a Conda environment with a compatible Python version, such as 3.11 or 3.12 as shown below. For more information on compatible Python versions, see :ref:`system-requirements`.
