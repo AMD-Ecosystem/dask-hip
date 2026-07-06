@@ -98,7 +98,7 @@ Basic GPU computation
 =====================
 
 The following example creates a cluster, generates a large random matrix on the
-GPUs using `amd-cupy <https://pypi.amd.com/simple/amd-cupy/>`_ as the GPU
+GPUs using `amd-cupy <https://pypi.amd.com/rocm-7.2.3/simple/amd-cupy/>`_ as the GPU
 array backend, computes its sum across all GPUs, and collects the result:
 
 .. code-block:: python

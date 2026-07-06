@@ -73,17 +73,8 @@ for UCX installation instructions.
 
 ## Installing
 
-Install from AMD PyPI:
-
-```bash
-pip install amd-dask-hip --extra-index-url=https://pypi.amd.com/simple
-```
-
-For UCX communication support:
-
-```bash
-pip install amd-distributed-hipucxx --extra-index-url=https://pypi.amd.com/simple
-```
+For installing pre-built packages via AMD PyPI, see the
+[installation guide](https://rocm.docs.amd.com/projects/dask-hip/en/latest/install/install.html).
 
 For building from source, see the
 [build guide](https://rocm.docs.amd.com/projects/dask-hip/en/latest/install/build.html).

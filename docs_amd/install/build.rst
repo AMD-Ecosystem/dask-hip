@@ -57,7 +57,7 @@ them first:
 
 .. code-block:: bash
 
-   pip install hip-python hip-python-as-cuda numba-hip --extra-index-url=https://pypi.amd.com/simple
+   pip install hip-python hip-python-as-cuda numba-hip --extra-index-url=https://pypi.amd.com/rocm-7.2.3/simple/
 
 pynvml compatibility
 --------------------

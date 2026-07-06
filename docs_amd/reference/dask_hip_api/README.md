@@ -20,7 +20,7 @@ The stubs must be generated on a system with AMD GPUs and a working dask-hip ins
 1. Install dask-hip and all dependencies:
 
    ```bash
-   pip install -e ".[test]" --extra-index-url=https://pypi.amd.com/simple
+   pip install -e ".[test]" --extra-index-url=https://pypi.amd.com/rocm-7.2.3/simple/
    pip install mypy sphinx-click  # provides stubgen and CLI doc generation
    ```
 
