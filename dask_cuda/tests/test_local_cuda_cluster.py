@@ -1,11 +1,6 @@
-# <<<<<<< OLD CODE from e914eab (7abec34) - COMMENTED OUT
-# # SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
-# # SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
-# # SPDX-License-Identifier: Apache-2.0 AND MIT
-# =======
 # SPDX-FileCopyrightText: Copyright (c) 2019-2026, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-License-Identifier: Apache-2.0
-# >>>>>>> END NEW CODE (7abec34)
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 import asyncio
 import contextlib
@@ -197,14 +192,10 @@ async def test_no_memory_limits_cudaworker():
             await new_worker.close()
 
 
-# <<<<<<< OLD CODE from 7da3176 (3ce274b) - COMMENTED OUT
-# @gen_test(timeout=60)
-# =======
-@gen_test(timeout=20)
+@gen_test(timeout=60)
 @pytest.mark.flaky(
     reruns=3,
 )
-# >>>>>>> END NEW CODE (3ce274b)
 async def test_all_to_all():
     async with LocalCUDACluster(
         CUDA_VISIBLE_DEVICES="0,1",
@@ -252,18 +243,7 @@ async def test_rmm_pool():
                 assert v is rmm.mr.PoolMemoryResource
 
 
-# <<<<<<< OLD CODE from 8056bc4 (3ed1f57) - COMMENTED OUT
-# @gen_test(timeout=60)
-# async def test_rmm_maximum_poolsize_without_poolsize_error():
-#     pytest.importorskip("rmm")
-#     with pytest.raises(ValueError):
-#         await LocalCUDACluster(rmm_maximum_pool_size="2GB", asynchronous=True)
-#
-#
-# @gen_test(timeout=60)
-# =======
-@gen_test(timeout=20)
-# >>>>>>> END NEW CODE (3ed1f57)
+@gen_test(timeout=60)
 async def test_rmm_managed():
     rmm = pytest.importorskip("rmm")
 

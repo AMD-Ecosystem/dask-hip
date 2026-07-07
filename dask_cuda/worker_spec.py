@@ -22,14 +22,9 @@ def worker_spec(
     CUDA_VISIBLE_DEVICES=None,
     enable_tcp_over_ucx=False,
     enable_infiniband=False,
-# <<<<<<< OLD CODE from 85d942a (b577759) - COMMENTED OUT
-#     enable_rocm_ipc=False,
-#     enable_nvlink=None,
-#     **kwargs
-# =======
+    enable_rocm_ipc=False,
     enable_nvlink=False,
     **kwargs,
-# >>>>>>> END NEW CODE (b577759)
 ):
     """Create a Spec for a CUDA worker.
 

@@ -1,11 +1,6 @@
-# <<<<<<< OLD CODE from 85d942a (b577759) - COMMENTED OUT
-# # SPDX-FileCopyrightText: Copyright (c) 2021-2022, NVIDIA CORPORATION & AFFILIATES.
+# # SPDX-FileCopyrightText: Copyright (c) 2021-2025, NVIDIA CORPORATION & AFFILIATES.
 # # SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
 # # SPDX-License-Identifier: Apache-2.0 AND MIT
-# =======
-# SPDX-FileCopyrightText: Copyright (c) 2021-2025, NVIDIA CORPORATION. All rights reserved.
-# SPDX-License-Identifier: Apache-2.0
-# >>>>>>> END NEW CODE (b577759)
 
 import click
 import cupy

@@ -1,11 +1,6 @@
-# <<<<<<< OLD CODE from 2cb3024 (c8afa57) - COMMENTED OUT
-# # SPDX-FileCopyrightText: Copyright (c) 2021-2025, NVIDIA CORPORATION & AFFILIATES.
-# # SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
-# # SPDX-License-Identifier: Apache-2.0 AND MIT
-# =======
 # SPDX-FileCopyrightText: Copyright (c) 2021-2026, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-License-Identifier: Apache-2.0
-# >>>>>>> END NEW CODE (c8afa57)
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 import contextlib
 from collections import ChainMap

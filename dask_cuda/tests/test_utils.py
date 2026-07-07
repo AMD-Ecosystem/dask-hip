@@ -1,26 +1,14 @@
-# <<<<<<< OLD CODE from f31a422 (abfa0c8) - COMMENTED OUT
-# # SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
-# # SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
-# # SPDX-License-Identifier: Apache-2.0 AND MIT
+# SPDX-FileCopyrightText: Copyright (c) 2019-2026, NVIDIA CORPORATION & AFFILIATES.
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 #
 # # flake8: noqa: E402
-# =======
-# SPDX-FileCopyrightText: Copyright (c) 2019-2026, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-License-Identifier: Apache-2.0
-# >>>>>>> END NEW CODE (abfa0c8)
 
 import os
 from unittest.mock import patch
 
 import pytest
-# <<<<<<< OLD CODE from f31a422 (abfa0c8) - COMMENTED OUT
-# from numba import hip
-#
-# import pynvml
-#
-# hip.pose_as_cuda()
-# from numba import cuda
-# =======
+import pynvml
 
 try:
     from cuda.core import Device
@@ -30,7 +18,6 @@ except ImportError:
 
     Device = cuda.core.experimental.Device
 
-# >>>>>>> END NEW CODE (abfa0c8)
 
 from dask.config import canonical_name
 

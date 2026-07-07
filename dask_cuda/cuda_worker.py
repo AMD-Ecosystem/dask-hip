@@ -1,11 +1,6 @@
-# <<<<<<< OLD CODE from 6734108 (9ac2346) - COMMENTED OUT
-# # SPDX-FileCopyrightText: Copyright (c) 2020-2025, NVIDIA CORPORATION & AFFILIATES.
-# # SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
-# # SPDX-License-Identifier: Apache-2.0 AND MIT
-# =======
 # SPDX-FileCopyrightText: Copyright (c) 2020-2026, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-License-Identifier: Apache-2.0
-# >>>>>>> END NEW CODE (9ac2346)
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 from __future__ import absolute_import, division, print_function
 
@@ -76,11 +71,8 @@ class CUDAWorker(Server):
         enable_rdmacm=None,
         worker_class=None,
         pre_import=None,
-# <<<<<<< OLD CODE from 9687cd7 (b9879b9) - COMMENTED OUT
-#         enable_nvlink=None,
-# =======
         worker_port=None,
-# >>>>>>> END NEW CODE (b9879b9)
+        enable_nvlink=None,
         **kwargs,
     ):
         if enable_nvlink is not None:

@@ -20,10 +20,6 @@ def DASK_2025_4_0():
 
 
 @functools.lru_cache(maxsize=None)
-def get_cuda_core_version() -> packaging.version.Version:
-    return packaging.version.parse(importlib.metadata.version("cuda-core"))
-
-
-@functools.lru_cache(maxsize=None)
 def CUDA_CORE_0_5_0():
-    return get_cuda_core_version() >= packaging.version.parse("0.5.0")
+    # AMD/HIP: cuda.core is provided by hip-python-interop
+    return True

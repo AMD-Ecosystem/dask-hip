@@ -1,11 +1,6 @@
-# <<<<<<< OLD CODE from e914eab (7abec34) - COMMENTED OUT
-# # SPDX-FileCopyrightText: Copyright (c) 2019-2025, NVIDIA CORPORATION & AFFILIATES.
-# # SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
-# # SPDX-License-Identifier: Apache-2.0 AND MIT
-# =======
 # SPDX-FileCopyrightText: Copyright (c) 2019-2026, NVIDIA CORPORATION & AFFILIATES.
-# SPDX-License-Identifier: Apache-2.0
-# >>>>>>> END NEW CODE (7abec34)
+# SPDX-FileCopyrightText: Copyright (c) 2026 Advanced Micro Devices, Inc.
+# SPDX-License-Identifier: Apache-2.0 AND MIT
 
 import multiprocessing as mp
 import os
@@ -17,7 +12,6 @@ import textwrap
 
 from dask_cuda._compat import CUDA_CORE_0_5_0
 
-# >>>>>>> END NEW CODE (7abec34)
 import numpy
 import psutil
 import pytest
@@ -28,14 +22,14 @@ from distributed.deploy.local import LocalCluster
 
 from dask_cuda import DASK_USE_ROCM
 from dask_cuda.initialize import initialize
-# <<<<<<< OLD CODE from 0e9d8da (83fba3c) - COMMENTED OUT
-# from dask_cuda.utils import get_gpu_count, get_ucx_config
-# =======
 from dask_cuda.utils import get_ucx_config, get_gpu_handle
-# >>>>>>> END NEW CODE (83fba3c)
 from dask_cuda.utils_test import IncreasedCloseTimeoutNanny
 
-if CUDA_CORE_0_5_0():
+if DASK_USE_ROCM:
+    # AMD/HIP: The only test that requires cuda.core is
+    # test_cuda_context_warning_with_subprocess_warnings which is skipped for AMD/Hip.
+    system = None
+elif CUDA_CORE_0_5_0():
     from cuda.core import system
 else:
     from cuda.core.experimental import system
@@ -394,18 +388,10 @@ def _test_cuda_context_warning_with_subprocess_warnings(protocol):
             ):
                 warnings_assigned_device_found.append(line)
 
-# <<<<<<< OLD CODE from 9219526 (fab2c35) - COMMENTED OUT
-# # <<<<<<< OLD CODE from e914eab (7abec34) - COMMENTED OUT
-# #         num_devices = get_gpu_count()
-# # =======
-#         num_devices = system.num_devices
-# # >>>>>>> END NEW CODE (7abec34)
-# =======
         if CUDA_CORE_0_5_0():
             num_devices = system.get_num_devices()
         else:
             num_devices = system.num_devices
-# >>>>>>> END NEW CODE (fab2c35)
 
         # Every worker raises the warning once. With protocol="ucx" the warning is
         # raised once more by the parent process.
