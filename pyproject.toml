@@ -17,7 +17,7 @@ authors = [
     { name = "Advanced Micro Devices, Inc." },
     { name = "NVIDIA Corporation" },
 ]
-license = { text = "Apache-2.0 AND MIT" }
+license = "Apache-2.0 AND MIT"
 license-files = ["LICENSE", "NOTICE.txt"]
 requires-python = ">=3.11"
 dependencies = [
@@ -147,9 +147,6 @@ filterwarnings = [
     # remove after https://github.com/rapidsai/dask-cuda/issues/1087 is closed
     "ignore:There is no current event loop:DeprecationWarning:tornado",
 ]
-
-[tool.setuptools]
-license-files = ["LICENSE", "NOTICE.txt"]
 
 [tool.setuptools.dynamic]
 version = {file = "dask_cuda/VERSION"}
