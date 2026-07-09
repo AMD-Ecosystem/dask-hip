@@ -86,7 +86,7 @@ def worker_spec(
        'preload_argv': ['--create-cuda-context']}}}
 
     """
-    if enable_nvlink is not None:
+    if enable_nvlink:
         enable_rocm_ipc = enable_nvlink
         warn_about_nvlink_if_not_suppressed()
 
