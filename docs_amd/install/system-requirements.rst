@@ -1,6 +1,6 @@
 .. meta::
    :description: dask-hip system requirements
-   :keywords: Dask, GPU, HIP, ROCm, ROCm-DS, AMD, requirements, compatibility
+   :keywords: Dask, GPU, HIP, ROCm, AMD Data Science, requirements, compatibility
 
 .. _system-requirements:
 
