@@ -3,7 +3,7 @@
 dask-hip is an extension of [Dask.distributed](https://distributed.dask.org/)
 that simplifies deploying Dask clusters on multi-GPU systems with AMD GPUs. It
 is derived from [dask-cuda](https://github.com/rapidsai/dask-cuda) by NVIDIA
-Corporation and is part of the [ROCm-DS](https://github.com/ROCm-DS) ecosystem.
+Corporation and is part of the [AMD Data Science](https://github.com/AMD-Ecosystem) ecosystem.
 
 Key capabilities include one-worker-per-GPU scheduling with automatic
 `HIP_VISIBLE_DEVICES` management, CPU affinity, UCX-based high-performance
@@ -66,7 +66,7 @@ pip install .
 
 ### UCX (optional, for high-performance communication)
 
-UCX-based communication via [hip-ucxx](https://github.com/ROCm-DS/hip-ucxx)
+UCX-based communication via [hip-ucxx](https://github.com/AMD-Ecosystem/hip-ucxx)
 enables ROCm-IPC and InfiniBand transports. See the
 [hip-ucxx build guide](https://rocm.docs.amd.com/projects/hip-ucxx/en/latest/install/build.html)
 for UCX installation instructions.
