@@ -1,6 +1,6 @@
 .. meta::
    :description: dask-hip installation guide
-   :keywords: Dask, GPU, distributed computing, HIP, ROCm, ROCm-DS, AMD, install
+   :keywords: Dask, GPU, distributed computing, HIP, ROCm, AMD Data Science, install
 
 .. _install:
 
