@@ -1,6 +1,6 @@
 .. meta::
    :description: Building dask-hip from source
-   :keywords: Dask, GPU, distributed computing, HIP, ROCm, ROCm-DS, AMD, build, source
+   :keywords: Dask, GPU, distributed computing, HIP, ROCm, AMD Data Science, build, source
 
 .. _build:
 
@@ -73,7 +73,7 @@ Clone the repository and install:
 
 .. code-block:: bash
 
-   git clone https://github.com/ROCm-DS/dask-hip.git
+   git clone https://github.com/AMD-Ecosystem/dask-hip.git
    cd dask-hip
    pip install .
 
