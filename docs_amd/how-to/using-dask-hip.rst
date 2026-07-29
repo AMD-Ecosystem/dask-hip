@@ -1,6 +1,6 @@
 .. meta::
    :description: Getting started with dask-hip for multi-GPU computing
-   :keywords: Dask, GPU, distributed computing, HIP, ROCm, ROCm-DS, AMD, tutorial, getting started
+   :keywords: Dask, GPU, distributed computing, HIP, ROCm, AMD Data Science, tutorial, getting started
 
 .. _using-dask-hip:
 
@@ -155,7 +155,7 @@ UCX-enabled local cluster
 
 For high-performance GPU-to-GPU communication, dask-hip integrates with
 `UCX <https://www.openucx.org/>`_ via
-`hip-ucxx <https://github.com/ROCm-DS/hip-ucxx>`_. The following example
+`hip-ucxx <https://github.com/AMD-Ecosystem/hip-ucxx>`_. The following example
 (from ``examples/ucx/local_cuda_cluster.py``) creates a UCX-enabled cluster
 with ROCm-IPC transport:
 

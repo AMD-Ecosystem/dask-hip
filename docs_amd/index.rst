@@ -1,6 +1,6 @@
 .. meta::
   :description: dask-hip documentation and API reference
-  :keywords: Dask, GPU, distributed computing, HIP, ROCm, ROCm-DS, AMD, RAPIDS, data science
+  :keywords: Dask, GPU, distributed computing, HIP, ROCm, ROCm-DS, AMD, RAPIDS, AMD Data Science
 
 .. _dask-hip:
 
@@ -16,7 +16,7 @@ RAPIDS® dask-cuda project, dask-hip brings the same distributed GPU computing c
 information, see :doc:`What is dask-hip? <what-is-dask-hip>`
 
 The dask-hip code is open and hosted at
-`https://github.com/ROCm-DS/dask-hip <https://github.com/ROCm-DS/dask-hip>`_.
+`https://github.com/AMD-Ecosystem/dask-hip <https://github.com/AMD-Ecosystem/dask-hip>`_.
 
 .. grid:: 2
   :gutter: 3
@@ -36,7 +36,7 @@ The dask-hip code is open and hosted at
     * :doc:`Python API reference <reference/api>`
 
 To contribute to the documentation refer to
-`Contributing to ROCm-DS  <https://rocm.docs.amd.com/projects/rocm-ds/en/latest/contribute/contributing.html>`_.
+`Contributing to AMD Data Science  <https://rocm.docs.amd.com/projects/rocm-ds/en/latest/contribute/contributing.html>`_.
 
 You can find licensing information on the
 `Licensing <https://rocm.docs.amd.com/projects/rocm-ds/en/latest/about/license.html>`_ page.
