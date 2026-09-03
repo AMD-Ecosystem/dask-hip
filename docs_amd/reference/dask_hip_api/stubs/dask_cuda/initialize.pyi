@@ -30,9 +30,9 @@ def initialize(
     ``dask cuda worker``. This function will ensure that they are provided a UCX
     configuration based on the flags and options passed by the user.
 
-    This function can also be used within a worker preload script for UCX configuration
-    of mainline Dask.distributed.
-    https://docs.dask.org/en/latest/setup/custom-startup.html
+    This function can also be used as a worker preload so that Dask imports
+    ``dask_cuda.initialize`` in each worker at startup. That applies UCX setup on
+    workers that are not started through ``LocalCUDACluster`` or ``dask cuda worker``.
 
     You can add it to your global config with the following YAML:
 
@@ -43,8 +43,9 @@ def initialize(
             preload:
               - dask_cuda.initialize
 
-    See https://docs.dask.org/en/latest/configuration.html for more information about
-    Dask configuration.
+    Place this snippet in Dask's YAML config (for example ``~/.config/dask/``) or set
+    the equivalent ``DASK_*`` environment variables so every worker preloads
+    ``dask_cuda.initialize``.
 
     Parameters
     ----------
