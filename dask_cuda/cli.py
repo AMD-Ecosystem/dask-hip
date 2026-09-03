@@ -413,10 +413,6 @@ def worker(
 
     A scheduler can be specified either through a URI passed through the ``SCHEDULER``
     argument or a scheduler file passed through the ``--scheduler-file`` option.
-
-    See
-    https://docs.rapids.ai/api/dask-cuda/stable/quickstart.html#dask-cuda-worker
-    for info.
     """
     if enable_nvlink is not None:
         enable_rocm_ipc = enable_nvlink
