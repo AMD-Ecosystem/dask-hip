@@ -3,10 +3,6 @@ Launch a distributed worker with GPUs attached to an existing scheduler.
 A scheduler can be specified either through a URI passed through the ``SCHEDULER``
 argument or a scheduler file passed through the ``--scheduler-file`` option.
 
-See
-https://docs.rapids.ai/api/dask-cuda/stable/quickstart.html#dask-cuda-worker
-for info.
-
 .. program:: dask cuda worker
 .. rubric:: Usage
 
