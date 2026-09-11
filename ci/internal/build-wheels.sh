@@ -67,15 +67,15 @@ cp -a "${src_dir}" "${build_dir}"
 export WHEEL_BUILD_ROOT="${BUILD_DIR}"
 
 wheels_build_env=$(mktemp -d)
-python3 -m venv ${wheels_build_env}
-. ${wheels_build_env}/bin/activate
+python3 -m venv "${wheels_build_env}"
+. "${wheels_build_env}/bin/activate"
 
     . "${SCRIPT_DIR}/_install-build-deps.sh"
 
     build_setuptools_wheel "${PROJECT_ID}"
 
 deactivate
-rm -rf ${wheels_build_env}
+rm -rf "${wheels_build_env}"
 
 #### test archive
 

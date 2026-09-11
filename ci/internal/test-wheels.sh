@@ -49,8 +49,8 @@ source "${SCRIPT_DIR}/_test-helpers.sh"
 source "${SCRIPT_DIR}/_wheel-helpers.sh"
 
 wheels_test_env=$(mktemp -d)
-python3 -m venv ${wheels_test_env}
-. ${wheels_test_env}/bin/activate
+python3 -m venv "${wheels_test_env}"
+. "${wheels_test_env}/bin/activate"
 
   pip install --upgrade pip
   . "${SCRIPT_DIR}/_install-test-deps.sh"
@@ -63,7 +63,7 @@ python3 -m venv ${wheels_test_env}
   setup_dask_hip_test_env
 
   test_failures=0
-  cd ${BUILD_DIR}/${PROJECT_ID}
+  cd "${BUILD_DIR}/${PROJECT_ID}"
 
       results_suffix=${DASK_HIP_TEST_RESULTS_SUFFIX:+-${DASK_HIP_TEST_RESULTS_SUFFIX}}
       CSV_OUTPUT_DIR=${PROJECT_ID}_pytest_output${results_suffix}
@@ -72,13 +72,13 @@ python3 -m venv ${wheels_test_env}
 
       # --import-mode=append keeps the installed dask_cuda on the path ahead of
       # the checkout beside the tests, so the wheel is what gets exercised.
-      run_tests dask_cuda/tests ${CSV_OUTPUT_DIR} ${TIMEOUT_PER_TEST_SEC} \
+      run_tests dask_cuda/tests "${CSV_OUTPUT_DIR}" "${TIMEOUT_PER_TEST_SEC}" \
         "--timeout-method=thread --import-mode=append"
 
-      result=$(merge_test_results ${CSV_OUTPUT_DIR}) || test_failures=1
-      echo $result > ${ARTIFACTS_DIR}/${PROJECT_ID}-test-results-py${results_suffix}.csv
+      result=$(merge_test_results "${CSV_OUTPUT_DIR}") || test_failures=1
+      echo "$result" > "${ARTIFACTS_DIR}/${PROJECT_ID}-test-results-py${results_suffix}.csv"
 
 deactivate
-rm -rf ${wheels_test_env}
+rm -rf "${wheels_test_env}"
 
-exit $test_failures
+exit "$test_failures"
