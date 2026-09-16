@@ -35,6 +35,7 @@ os_id=$(. /etc/os-release; echo "$ID")
 os_id_like=$(. /etc/os-release; echo "$ID_LIKE")
 
 if [[ "${os_id}" == *"ubuntu"* ]]; then
+    apt-get update
     apt install -y python3-pip python3-dev python3-venv
 elif [[ "${os_id_like}" == *"rhel"* ]] && [[ "${AUDITWHEEL_PLAT:-}" == "manylinux"* ]]; then
     # note: dev headers already avail
