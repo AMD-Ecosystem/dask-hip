@@ -29,8 +29,8 @@ dependencies = [
     "dask>=2026.1.1,<2026.1.2",
     "distributed>=2026.1.1,<2026.1.2",
 
-    "hip-python==7.13.*",
-    "hip-python-interop==7.13.*",
+    "hip-python-interop==10.0.*",
+    "rocm-bindings-hip==10.0.*",
 ]
 classifiers = [
     "Intended Audience :: Developers",
