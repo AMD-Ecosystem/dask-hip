@@ -58,7 +58,7 @@ python3 -m venv "${wheels_test_env}"
   # No --no-index here, unlike the build: this install resolves the wheel's
   # own runtime dependencies for real.
   install_built_wheel -- \
-    "amd_dask_hip${DASK_HIP_VERSION:+==${DASK_HIP_VERSION}}"
+    "amd_dask_hip[test,test_ucxx,test_hipdf]${DASK_HIP_VERSION:+==${DASK_HIP_VERSION}}"
 
   setup_dask_hip_test_env
 
