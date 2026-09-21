@@ -9,14 +9,16 @@ subtrees:
 
 - caption: Installation
   entries:
-  - file: install/install.md
+  - file: install/system-requirements.rst
+    title: System requirements
+  - file: install/install.rst
     title: Installing dask-hip
-  - file: install/build.md
+  - file: install/build.rst
     title: Building from source
 
 - caption: How to
   entries:
-  - file: how-to/using-dask-hip.md
+  - file: how-to/using-dask-hip.rst
     title: Using dask-hip
 
 - caption: Reference
@@ -32,4 +34,4 @@ subtrees:
 
 - caption: About
   entries:
-  - file: license.md
+  - file: license.rst

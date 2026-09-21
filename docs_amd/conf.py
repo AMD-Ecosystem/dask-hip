@@ -17,7 +17,7 @@ try:
 
     version_number = __version__
 except ImportError:
-    version_number = "1.0.0"
+    version_number = "2.0.0"
 
 left_nav_title = f"dask-hip {version_number} documentation"
 
@@ -32,7 +32,7 @@ all_article_info_author = ""
 
 external_projects_current_project = "dask-hip"
 
-html_context = {"docs_header_version": "26.03"}
+html_context = {"docs_header_version": "26.09"}
 html_theme = "rocm_docs_theme"
 html_theme_options = {
     "flavor": "rocm-ds",
