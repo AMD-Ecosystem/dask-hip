@@ -57,7 +57,7 @@ them first:
 
 .. code-block:: bash
 
-   pip install hip-python hip-python-interop numba-hip --extra-index-url=https://pypi.amd.com/rocm-7.2.3/simple/
+   pip install hip-python hip-python-interop numba-hip --extra-index-url=https://pypi.amd.com/rocm-10.0.0/simple/
 
 pynvml compatibility
 --------------------
