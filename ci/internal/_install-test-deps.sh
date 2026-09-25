@@ -32,4 +32,4 @@ pip install --upgrade pip
 # installed by name from the pool, and pip does not resolve an extra of a
 # distribution it takes from --find-links without being asked for it.
 pip install pytest pytest-cov pytest-csv pytest-timeout \
-    "pytest-rerunfailures!=16.0.0" psutil pyarrow
+    "pytest-rerunfailures!=16.0.0" psutil

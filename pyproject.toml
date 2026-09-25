@@ -40,7 +40,6 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14",
 ]
 
 [project.scripts]
@@ -63,7 +62,6 @@ test = [
     "pytest-rerunfailures!=16.0.0",
     "pytest-timeout",
     "psutil",
-    "pyarrow",
 ]
 test_ucxx = [
     "amd-hipucxx==0.2.*",
