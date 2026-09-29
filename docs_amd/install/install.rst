@@ -63,6 +63,20 @@ To install the ``amd-distributed-hipucxx`` package for high-performance UCX comm
 
    pip install amd-distributed-hipucxx --extra-index-url=https://pypi.amd.com/rocm-10.0.0/simple/
 
+The hip-ucxx packages depend on ``amd-libucx``, which brings its own
+ROCm-enabled UCX, so no separate UCX installation is needed.
+
+.. note::
+
+   The ``amd-libucx`` dependency is a source distribution and compiles a
+   ROCm-enabled UCX during ``pip install``. Install its build prerequisites
+   first (on Ubuntu):
+
+   .. code-block:: bash
+
+      sudo apt install make gcc g++ patchelf wget \
+          rdma-core libibverbs-dev librdmacm-dev libnuma-dev
+
 pynvml compatibility
 --------------------
 

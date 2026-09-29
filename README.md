@@ -63,9 +63,12 @@ AMD SMI runtime library shipped with ROCm must be installed.
 ### UCX (optional, for high-performance communication)
 
 UCX-based communication via [hip-ucxx](https://github.com/AMD-Ecosystem/hip-ucxx)
-enables ROCm-IPC and InfiniBand transports. See the
+enables ROCm-IPC and InfiniBand transports. The hip-ucxx packages depend on
+`amd-libucx`, a source-only package that compiles a ROCm-enabled UCX on your
+machine during `pip install`, so no separate UCX installation is normally
+required (its build prerequisites must be present). See the
 [hip-ucxx build guide](https://rocm.docs.amd.com/projects/hip-ucxx/en/latest/install/build.html)
-for UCX installation instructions.
+if you prefer to supply UCX yourself.
 
 ## Installing
 
