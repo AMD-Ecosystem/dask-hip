@@ -1,4 +1,6 @@
-rocm-docs-core==1.38.0
+#rocm-docs-core==1.38.0
+rocm-docs-core==1.40.2
+doxysphinx
 myst-parser
 sphinx-autoapi
 sphinx-copybutton
