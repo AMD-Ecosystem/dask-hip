@@ -36,7 +36,7 @@ The dask-hip code is open and hosted at
     * :doc:`Python API reference <reference/api>`
 
 To contribute to the documentation refer to
-`Contributing to AMD Data Science  <https://rocm.docs.amd.com/projects/rocm-ds/en/latest/contribute/contributing.html>`_.
+`Contributing to AMD Data Science  <https://rocm.docs.amd.com/projects/datascience/en/latest/contribute/contributing.html>`_.
 
 You can find licensing information on the
-`Licensing <https://rocm.docs.amd.com/projects/rocm-ds/en/latest/about/license.html>`_ page.
+`Licensing <https://rocm.docs.amd.com/projects/datascience/en/latest/about/license.html>`_ page.
