@@ -7,7 +7,7 @@ ecosystem.
 Upstream dask-cuda changes are tracked separately in
 [`._upstream/CHANGELOG.md`](._upstream/CHANGELOG.md).
 
-## [Release Version 2.0.0 / AMD Data Science 26.09]
+## [Release Version 2.0.0 / AMD Data Science 26.10]
 
 ### Features
 - Updated to upstream dask-cuda 26.06, bringing in its new features and bug fixes.
