@@ -72,9 +72,9 @@ test_hipdf = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/AMD-AIOSS/dask-hip"
+Homepage = "https://github.com/AMD-Ecosystem/dask-hip"
 Documentation = "https://rocm.docs.amd.com/projects/dask-hip/en/latest/"
-Source = "https://github.com/AMD-AIOSS/dask-hip"
+Source = "https://github.com/AMD-Ecosystem/dask-hip"
 
 [tool.coverage.run]
 disable_warnings = [
