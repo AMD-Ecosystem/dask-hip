@@ -11,8 +11,8 @@ What is dask-hip?
 dask-hip is an extension of `Dask.distributed <https://distributed.dask.org/en/latest/>`__ that
 simplifies the deployment of Dask clusters on multi-GPU systems. dask-hip is part of the AMD Data
 Science Toolkit and works alongside other AMD Data Science components such as
-`hipDF <https://github.com/AMD-Ecosystem/hipDF>`__, `hipRAFT <https://github.com/AMD-Ecosystem/hipRaft>`__,
-and `hip-ucxx <https://github.com/AMD-Ecosystem/hip-ucxx>`__.
+`hipDF <https://github.com/AMD-AIOSS/hipDF>`__, `hipRAFT <https://github.com/AMD-AIOSS/hipRaft>`__,
+and `hip-ucxx <https://github.com/AMD-AIOSS/hip-ucxx>`__.
 
 dask-hip has been adapted from dask-cuda part of the RAPIDS project. It preserves the directory structure, file naming,
 and API naming to minimize porting friction for developers migrating their workloads to AMD platforms.
