@@ -36,7 +36,7 @@ Python dependencies
 ===================
 
 dask-hip requires the ``amdsmi`` Python package, which is distributed with ROCm (not via AMD
-PyPI). Install it from the ROCm installation before building dask-hip. See `AMD SMI documentation <https://rocm.docs.amd.com/projects/amdsmi/en/latest/index.html>`__ for more information.
+PyPI). Install it from the ROCm installation before building dask-hip. See `AMD SMI documentation <https://rocm.docs.amd.com/projects/amdsmi/en/docs-10.0.0/index.html>`__ for more information.
 
 .. code-block:: bash
 
