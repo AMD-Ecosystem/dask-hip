@@ -49,9 +49,9 @@ process. Connect a ``Client`` to submit work:
 .. tip::
 
    Always wrap ``LocalCUDACluster`` usage in an ``if __name__ == "__main__":``
-   block when running as a standalone script. See
-   `standalone Python scripts <https://docs.dask.org/en/stable/scheduling.html#standalone-python-scripts>`_
-   for details.
+   block when running as a standalone script. Worker processes re-import the
+   module on start; without the guard, a new cluster would be created in each
+   worker.
 
 From the command line:
 ----------------------
