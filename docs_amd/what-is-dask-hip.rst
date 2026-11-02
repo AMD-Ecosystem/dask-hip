@@ -1,6 +1,6 @@
 .. meta::
   :description: dask-hip documentation and API reference
-  :keywords: Dask, GPU, distributed computing, HIP, ROCm, ROCm-DS, AMD, RAPIDS, AMD Data Science
+  :keywords: Dask, GPU, distributed computing, HIP, ROCm, AMD, RAPIDS, AMD Data Science
 
 .. _whatis-dask:
 
